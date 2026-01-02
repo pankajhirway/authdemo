@@ -896,10 +896,62 @@
     "database_verification": {
       "required": false,
       "checks": []
-    }
   },
-  "qa_signoff": null,
-  "status": "human_review",
+  "qa_signoff": {
+    "status": "rejected",
+    "timestamp": "2026-01-02T18:30:00.000Z",
+    "qa_session": 2,
+    "issues_found": [
+      {
+        "type": "critical",
+        "title": "Missing Unit Tests",
+        "location": "frontend/src/lib/",
+        "fix_required": "QA Acceptance Criteria requires 4 unit test files (api.test.ts, cart.test.ts, auth.test.ts, format.test.ts). Only cart.test.ts exists. Create api.test.ts, auth.test.ts, and format.test.ts."
+      }
+    ],
+    "fix_request_file": "QA_FIX_REQUEST.md",
+    "tests_passed": {
+      "unit": "1/4 files exist",
+      "integration": "not configured",
+      "e2e": "not configured"
+    },
+    "verified_by": "qa_agent",
+    "report_file": "qa_report.md"
+  },
+  "status": "needs_fixes",
   "planStatus": "review",
-  "updated_at": "2026-01-02T18:15:00.000Z"
+  "updated_at": "2026-01-02T18:30:00.000Z",
+  "qa_iteration_history": [
+    {
+      "iteration": 1,
+      "status": "error",
+      "timestamp": "2026-01-02T14:17:42.502616+00:00",
+      "issues": [
+        {
+          "title": "QA error",
+          "description": "QA agent did not update implementation_plan.json"
+        }
+      ]
+    },
+    {
+      "iteration": 2,
+      "status": "rejected",
+      "timestamp": "2026-01-02T18:30:00.000Z",
+      "issues": [
+        {
+          "type": "critical",
+          "title": "Missing Unit Tests",
+          "description": "3 of 4 required unit test files are missing"
+        }
+      ]
+    }
+  ],
+  "qa_stats": {
+    "total_iterations": 2,
+    "last_iteration": 2,
+    "last_status": "rejected",
+    "issues_by_type": {
+      "critical": 1
+    }
+  }
 }
