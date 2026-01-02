@@ -452,7 +452,8 @@
               "Audit logs accessible"
             ]
           },
-          "status": "pending"
+          "status": "completed",
+          "notes": "Auditor dashboard components created. Includes AllOrdersList for read-only view of all orders and AuditLogViewer for complete audit trail. Browser verification requires routing setup (phase 7)."
         },
         {
           "id": "subtask-5-4",
@@ -642,7 +643,7 @@
       "subtasks": [
         {
           "id": "subtask-8-1",
-          "description": "End-to-end verification of ordering flow (browse → cart → checkout → submit)",
+          "description": "End-to-end verification of ordering flow (browse \u2192 cart \u2192 checkout \u2192 submit)",
           "all_services": true,
           "files_to_modify": [],
           "files_to_create": [],
