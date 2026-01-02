@@ -1,0 +1,36 @@
+{
+  "task_description": "Fix Docker container startup issue where the FastAPI application fails to serve the UI because static files are not copied into the Docker image",
+  "files_to_modify": {
+    "main": [
+      "Dockerfile",
+      "docker-compose.yml"
+    ]
+  },
+  "files_to_reference": [
+    "app/main.py",
+    "pyproject.toml",
+    ".env.example"
+  ],
+  "patterns": {
+    "dockerfile_pattern": "Uses gunicorn with uvicorn worker class for production; must copy both app/ and static/ directories",
+    "fastapi_static_files": "Static files mounted via app.mount('/static', StaticFiles(directory='static'), name='static') in app/main.py",
+    "compose_dependencies": "Services use healthcheck conditions for postgres and keycloak before backend starts",
+    "environment_handling": "pydantic-settings BaseSettings loads from .env file with proper field validators"
+  },
+  "existing_implementations": {
+    "description": "Found Dockerfile using gunicorn+uvicorn workers. FastAPI app in app/main.py has static file mounting configured. Static files exist in static/ directory (index.html is 45KB). docker-compose.yml has proper service orchestration with health checks.",
+    "relevant_files": [
+      "Dockerfile",
+      "docker-compose.yml",
+      "app/main.py",
+      "app/core/config.py"
+    ],
+    "critical_issue": "Dockerfile only copies ./app ./app but does NOT copy ./static ./static. This means the UI files (index.html) will not exist in the Docker container, causing 404 errors.",
+    "other_issues": [
+      "Health check uses curl which must be installed (it is via apt-get in Dockerfile)",
+      "Database connection has graceful failure handling in lifespan manager",
+      "Environment variables are passed correctly in docker-compose.yml"
+    ]
+  },
+  "root_cause_hypothesis": "Container likely starts but UI returns 404 because static/ directory is not copied into Docker image during build. The application itself runs (gunicorn starts) but the UI files are missing."
+}

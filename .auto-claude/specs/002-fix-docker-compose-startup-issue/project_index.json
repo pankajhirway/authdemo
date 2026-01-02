@@ -1,0 +1,604 @@
+{
+  "project_root": "G:\\Development\\AuthzAuthnDemo",
+  "project_type": "single",
+  "services": {
+    "main": {
+      "name": "main",
+      "path": "G:\\Development\\AuthzAuthnDemo",
+      "language": "Python",
+      "framework": "FastAPI",
+      "type": "backend",
+      "package_manager": "pip",
+      "default_port": 8000,
+      "orm": "SQLAlchemy",
+      "key_directories": {
+        "app": {
+          "path": "app",
+          "purpose": "Application code"
+        },
+        "tests": {
+          "path": "tests",
+          "purpose": "Tests"
+        }
+      },
+      "testing": "pytest",
+      "test_directory": "tests",
+      "dockerfile": "Dockerfile",
+      "environment": {
+        "variables": {
+          "DATABASE_URL": {
+            "value": "postgresql+asyncpg://postgres:aw2555@localhost:5432/authz_authn_db",
+            "source": ".env",
+            "type": "path",
+            "sensitive": false,
+            "required": true
+          },
+          "DATABASE_POOL_SIZE": {
+            "value": "20",
+            "source": ".env",
+            "type": "number",
+            "sensitive": false,
+            "required": true
+          },
+          "DATABASE_MAX_OVERFLOW": {
+            "value": "10",
+            "source": ".env",
+            "type": "number",
+            "sensitive": false,
+            "required": true
+          },
+          "KEYCLOAK_URL": {
+            "value": "<REDACTED>",
+            "source": ".env",
+            "type": "url",
+            "sensitive": true,
+            "required": true
+          },
+          "KEYCLOAK_REALM": {
+            "value": "<REDACTED>",
+            "source": ".env",
+            "type": "string",
+            "sensitive": true,
+            "required": true
+          },
+          "KEYCLOAK_CLIENT_ID": {
+            "value": "<REDACTED>",
+            "source": ".env",
+            "type": "string",
+            "sensitive": true,
+            "required": true
+          },
+          "KEYCLOAK_CLIENT_SECRET": {
+            "value": "<REDACTED>",
+            "source": ".env",
+            "type": "string",
+            "sensitive": true,
+            "required": true
+          },
+          "KEYCLOAK_ALGORITHM": {
+            "value": "<REDACTED>",
+            "source": ".env",
+            "type": "string",
+            "sensitive": true,
+            "required": true
+          },
+          "KEYCLOAK_ISSUER": {
+            "value": "<REDACTED>",
+            "source": ".env",
+            "type": "url",
+            "sensitive": true,
+            "required": true
+          },
+          "API_V1_PREFIX": {
+            "value": "/api/v1",
+            "source": ".env",
+            "type": "path",
+            "sensitive": false,
+            "required": true
+          },
+          "HOST": {
+            "value": "0.0.0.0",
+            "source": ".env",
+            "type": "string",
+            "sensitive": false,
+            "required": true
+          },
+          "PORT": {
+            "value": "8000",
+            "source": ".env",
+            "type": "number",
+            "sensitive": false,
+            "required": true
+          },
+          "WORKERS": {
+            "value": "4",
+            "source": ".env",
+            "type": "number",
+            "sensitive": false,
+            "required": true
+          },
+          "LOG_LEVEL": {
+            "value": "INFO",
+            "source": ".env",
+            "type": "string",
+            "sensitive": false,
+            "required": true
+          },
+          "ENVIRONMENT": {
+            "value": "development",
+            "source": ".env",
+            "type": "string",
+            "sensitive": false,
+            "required": true
+          },
+          "JWT_ACCESS_TOKEN_EXPIRE_MINUTES": {
+            "value": "<REDACTED>",
+            "source": ".env",
+            "type": "number",
+            "sensitive": true,
+            "required": true
+          },
+          "REFRESH_TOKEN_ENABLED": {
+            "value": "<REDACTED>",
+            "source": ".env",
+            "type": "boolean",
+            "sensitive": true,
+            "required": true
+          },
+          "RATE_LIMIT_PER_MINUTE": {
+            "value": "60",
+            "source": ".env",
+            "type": "number",
+            "sensitive": false,
+            "required": true
+          },
+          "RATE_LIMIT_BURST": {
+            "value": "10",
+            "source": ".env",
+            "type": "number",
+            "sensitive": false,
+            "required": true
+          },
+          "CORS_ORIGINS": {
+            "value": "[\"http://localhost:3000\", \"http://localhost:3001\", \"http://localhost:3002\"]",
+            "source": ".env",
+            "type": "path",
+            "sensitive": false,
+            "required": true
+          }
+        },
+        "required_count": 20,
+        "optional_count": 0,
+        "detected_count": 20
+      },
+      "api": {
+        "routes": [
+          {
+            "path": "/health",
+            "methods": [
+              "GET"
+            ],
+            "file": "app\\main.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/",
+            "methods": [
+              "GET"
+            ],
+            "file": "app\\main.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/items",
+            "methods": [
+              "GET"
+            ],
+            "file": "app\\db\\session.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/admin/settings",
+            "methods": [
+              "GET"
+            ],
+            "file": "app\\api\\dependencies\\auth.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data",
+            "methods": [
+              "POST"
+            ],
+            "file": "app\\api\\dependencies\\authorization.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/health",
+            "methods": [
+              "GET"
+            ],
+            "file": "app\\api\\routes\\admin.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/metrics",
+            "methods": [
+              "GET"
+            ],
+            "file": "app\\api\\routes\\admin.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data",
+            "methods": [
+              "GET"
+            ],
+            "file": "app\\api\\routes\\auditor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}",
+            "methods": [
+              "GET"
+            ],
+            "file": "app\\api\\routes\\auditor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}/events",
+            "methods": [
+              "GET"
+            ],
+            "file": "app\\api\\routes\\auditor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/audit",
+            "methods": [
+              "GET"
+            ],
+            "file": "app\\api\\routes\\auditor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data",
+            "methods": [
+              "POST"
+            ],
+            "file": "app\\api\\routes\\operator.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}",
+            "methods": [
+              "GET"
+            ],
+            "file": "app\\api\\routes\\operator.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}",
+            "methods": [
+              "PUT"
+            ],
+            "file": "app\\api\\routes\\operator.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}/submit",
+            "methods": [
+              "POST"
+            ],
+            "file": "app\\api\\routes\\operator.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data",
+            "methods": [
+              "GET"
+            ],
+            "file": "app\\api\\routes\\operator.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data",
+            "methods": [
+              "GET"
+            ],
+            "file": "app\\api\\routes\\supervisor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}",
+            "methods": [
+              "GET"
+            ],
+            "file": "app\\api\\routes\\supervisor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}/confirm",
+            "methods": [
+              "POST"
+            ],
+            "file": "app\\api\\routes\\supervisor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}/reject",
+            "methods": [
+              "POST"
+            ],
+            "file": "app\\api\\routes\\supervisor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}/correct",
+            "methods": [
+              "POST"
+            ],
+            "file": "app\\api\\routes\\supervisor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/health",
+            "methods": [
+              "GET"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\main.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/",
+            "methods": [
+              "GET"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\main.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/items",
+            "methods": [
+              "GET"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\db\\session.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/admin/settings",
+            "methods": [
+              "GET"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\dependencies\\auth.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data",
+            "methods": [
+              "POST"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\dependencies\\authorization.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/health",
+            "methods": [
+              "GET"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\admin.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/metrics",
+            "methods": [
+              "GET"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\admin.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data",
+            "methods": [
+              "GET"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\auditor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}",
+            "methods": [
+              "GET"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\auditor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}/events",
+            "methods": [
+              "GET"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\auditor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/audit",
+            "methods": [
+              "GET"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\auditor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data",
+            "methods": [
+              "POST"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\operator.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}",
+            "methods": [
+              "GET"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\operator.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}",
+            "methods": [
+              "PUT"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\operator.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}/submit",
+            "methods": [
+              "POST"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\operator.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data",
+            "methods": [
+              "GET"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\operator.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data",
+            "methods": [
+              "GET"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\supervisor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}",
+            "methods": [
+              "GET"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\supervisor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}/confirm",
+            "methods": [
+              "POST"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\supervisor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}/reject",
+            "methods": [
+              "POST"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\supervisor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          },
+          {
+            "path": "/data/{entry_id}/correct",
+            "methods": [
+              "POST"
+            ],
+            "file": ".worktrees\\001-create-demo-ordering-interface\\app\\api\\routes\\supervisor.py",
+            "framework": "FastAPI",
+            "requires_auth": false
+          }
+        ],
+        "total_routes": 42,
+        "methods": [
+          "PUT",
+          "POST",
+          "GET"
+        ],
+        "protected_routes": []
+      },
+      "migrations": {
+        "tool": "alembic",
+        "directory": "alembic/versions",
+        "config_file": "alembic.ini",
+        "commands": {
+          "upgrade": "alembic upgrade head",
+          "downgrade": "alembic downgrade -1",
+          "create": "alembic revision --autogenerate -m 'message'"
+        }
+      },
+      "api_documentation": {
+        "type": "openapi",
+        "auto_generated": true,
+        "docs_url": "/docs",
+        "redoc_url": "/redoc",
+        "openapi_url": "/openapi.json"
+      },
+      "monitoring": {
+        "health_checks": [
+          "/health",
+          "/health",
+          "/health",
+          "/health"
+        ]
+      }
+    }
+  },
+  "infrastructure": {
+    "docker_compose": "docker-compose.yml",
+    "docker_services": [
+      "postgres",
+      "keycloak",
+      "backend",
+      "prometheus",
+      "grafana"
+    ],
+    "dockerfile": "Dockerfile"
+  },
+  "conventions": {
+    "python_linting": "Ruff"
+  }
+}

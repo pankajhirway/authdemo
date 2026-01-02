@@ -1,0 +1,66 @@
+=== AUTO-BUILD PROGRESS ===
+
+Project: Demo Ordering Interface - Customer-Facing Restaurant UI
+Workspace: G:\Development\AuthzAuthnDemo
+Started: 2025-01-02
+
+Workflow Type: feature
+Rationale: Greenfield development adding new frontend functionality to existing backend API. Involves creating new UI components, pages, state management, and integration with existing authentication/authorization endpoints.
+
+Session 1 (Planner):
+- Created implementation_plan.json
+- Updated context.json with backend API patterns
+- Updated project_index.json with frontend service details
+- Created init.sh setup script
+- Created build-progress.txt
+
+Phase Summary:
+- Phase 1 - Backend API Verification: 2 subtasks, depends on []
+- Phase 2 - Frontend Project Setup: 3 subtasks, depends on [phase-1-backend-verification]
+- Phase 3 - Authentication Layer: 5 subtasks, depends on [phase-2-frontend-setup]
+- Phase 4 - Core Ordering UI: 6 subtasks, depends on [phase-3-authentication]
+- Phase 5 - Role-Based Dashboards: 4 subtasks, depends on [phase-4-core-ordering]
+- Phase 6 - Order History and Tracking: 2 subtasks, depends on [phase-5-role-dashboards]
+- Phase 7 - Layout and Polish: 4 subtasks, depends on [phase-6-order-history]
+- Phase 8 - Integration and Testing: 4 subtasks, depends on [phase-7-layout-polish]
+
+Services Involved:
+- main (backend): FastAPI application, provides REST API, Keycloak authentication, role-based authorization
+- frontend (new): React SPA with Vite, TypeScript, shadcn/ui, Tailwind CSS, Zustand state management
+
+Tech Stack:
+- Backend: Python 3.12, FastAPI, SQLAlchemy, PostgreSQL, Keycloak OAuth2/OIDC
+- Frontend: TypeScript, React 18+, Vite, shadcn/ui + Radix UI, Tailwind CSS, Zustand, Axios
+
+Key Backend API Endpoints:
+- Operator: POST /api/v1/operator/data (create), GET /api/v1/operator/data (list own), POST /api/v1/operator/data/{id}/submit (submit)
+- Supervisor: GET /api/v1/supervisor/data (list all), POST /api/v1/supervisor/data/{id}/confirm (approve), POST /api/v1/supervisor/data/{id}/reject (reject)
+- Auditor: GET /api/v1/auditor/data (list all), GET /api/v1/auditor/audit (audit logs)
+- Admin: GET /health, GET /api/v1/admin/metrics
+
+Authentication Pattern:
+- Keycloak OAuth2/OIDC for SSO
+- JWT tokens with role in realm_access.roles array
+- Four roles: operator, supervisor, auditor, admin
+
+Parallelism Analysis:
+- Max parallel phases: 2
+- Recommended workers: 2
+- Parallel groups: Phase-5 (Role-Based Dashboards) - 4 dashboard subtasks can run independently
+
+=== STARTUP COMMAND ===
+
+To continue building this spec, run:
+
+  cd G:\Development\AuthzAuthnDemo
+  source .venv/bin/activate
+  python auto-claude/run.py --spec 001 --parallel 2
+
+=== END SESSION 1 ===
+
+Next Steps:
+1. A coder agent will read implementation_plan.json
+2. Find next pending subtask (respecting dependencies)
+3. Implement the actual code changes
+4. Each subtask = one git commit
+5. Verification must pass before marking complete

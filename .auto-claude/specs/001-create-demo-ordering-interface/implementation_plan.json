@@ -1,0 +1,71 @@
+{
+  "qa_iteration_history": [
+    {
+      "iteration": 2,
+      "status": "error",
+      "timestamp": "2026-01-02T14:23:10.657591+00:00",
+      "issues": [
+        {
+          "title": "QA error",
+          "description": "QA agent did not update implementation_plan.json"
+        }
+      ]
+    },
+    {
+      "iteration": 3,
+      "status": "rejected",
+      "timestamp": "2026-01-02T19:50:00+00:00",
+      "issues": [
+        {
+          "title": "Missing required unit tests",
+          "description": "QA Acceptance Criteria requires 4 unit test files. Only cart.test.ts exists."
+        }
+      ]
+    },
+    {
+      "iteration": 3,
+      "status": "rejected",
+      "timestamp": "2026-01-02T14:30:25.701078+00:00",
+      "issues": [
+        {
+          "type": "critical",
+          "title": "Missing required unit tests per QA Acceptance Criteria",
+          "location": "frontend/src/lib/",
+          "fix_required": "Create 3 missing test files: api.test.ts, auth.test.ts, format.test.ts. Spec Lines 423-429 explicitly require these 4 unit test files for sign-off. Only cart.test.ts currently exists."
+        }
+      ],
+      "duration_seconds": 435.04
+    },
+    {
+      "iteration": 4,
+      "status": "approved",
+      "timestamp": "2026-01-02T14:40:14.362433+00:00",
+      "issues": [],
+      "duration_seconds": 299.74
+    }
+  ],
+  "qa_stats": {
+    "total_iterations": 4,
+    "last_iteration": 4,
+    "last_status": "approved",
+    "issues_by_type": {
+      "unknown": 2,
+      "critical": 1
+    }
+  },
+  "qa_signoff": {
+    "status": "approved",
+    "qa_session": 3,
+    "issues_found": [
+      {
+        "description": "None"
+      }
+    ],
+    "tests_passed": {},
+    "timestamp": "2026-01-02T14:39:33.063206+00:00",
+    "ready_for_qa_revalidation": false
+  },
+  "status": "human_review",
+  "planStatus": "review",
+  "last_updated": "2026-01-02T14:39:33.063222+00:00"
+}

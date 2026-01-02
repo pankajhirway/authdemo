@@ -1,0 +1,20 @@
+{
+  "discovered_files": {
+    "Dockerfile": {
+      "description": "Dockerfile only copies ./app ./app but does NOT copy ./static ./static. This is the root cause of UI 404 errors in Docker. Static files (index.html = 45KB) exist locally but are not included in the container image.",
+      "category": "docker-config",
+      "discovered_at": "2026-01-02T15:36:25.206276+00:00"
+    },
+    "app/main.py": {
+      "description": "FastAPI app mounts static files via app.mount('/static', StaticFiles(directory='static'), name='static'). The static/ directory is at project root level (same level as app/).",
+      "category": "fastapi-pattern",
+      "discovered_at": "2026-01-02T15:36:25.288954+00:00"
+    },
+    "docker-compose.yml": {
+      "description": "Uses service names as hostnames (postgres, keycloak) not localhost. Health checks configured with condition: service_healthy. Backend depends on both postgres and keycloak being healthy.",
+      "category": "docker-compose",
+      "discovered_at": "2026-01-02T15:36:25.380146+00:00"
+    }
+  },
+  "last_updated": "2026-01-02T15:36:25.380161+00:00"
+}

@@ -1,0 +1,65 @@
+{
+  "complexity": "standard",
+  "workflow_type": "investigation",
+  "confidence": 0.85,
+  "reasoning": "This task involves investigating and fixing a Docker container startup failure, then adding UI integration. While the changes are contained to Docker configuration files, the unknown root cause of the startup failure and the need to integrate a separate frontend service elevate this to STANDARD complexity. The docker-compose already exists with multiple services, providing a pattern to follow.",
+  "analysis": {
+    "scope": {
+      "estimated_files": 5,
+      "estimated_services": 2,
+      "is_cross_cutting": true,
+      "notes": "Will modify Dockerfile, docker-compose.yml, and likely add frontend Dockerfile. Changes affect multiple services that need to work together."
+    },
+    "integrations": {
+      "external_services": [],
+      "new_dependencies": [],
+      "research_needed": false,
+      "notes": "No new external dependencies - the frontend already exists in a worktree. Task is about integrating existing components."
+    },
+    "infrastructure": {
+      "docker_changes": true,
+      "database_changes": false,
+      "config_changes": true,
+      "notes": "Dockerfile and docker-compose.yml modifications needed. Frontend will need proper network configuration to communicate with backend."
+    },
+    "knowledge": {
+      "patterns_exist": true,
+      "research_required": true,
+      "unfamiliar_tech": [],
+      "notes": "docker-compose.yml already has patterns for multi-service orchestration. Research needed to identify root cause of startup failure."
+    },
+    "risk": {
+      "level": "medium",
+      "concerns": [
+        "Root cause of container startup failure is unknown",
+        "Frontend-backend CORS and API endpoint configuration",
+        "Network connectivity between containers",
+        "Potential environment variable mismatches"
+      ],
+      "notes": "Medium risk due to unknown startup failure and multi-container orchestration complexity."
+    }
+  },
+  "recommended_phases": [
+    "discovery",
+    "requirements",
+    "context",
+    "spec_writing",
+    "planning",
+    "validation"
+  ],
+  "flags": {
+    "needs_research": true,
+    "needs_self_critique": false,
+    "needs_infrastructure_setup": false
+  },
+  "validation_recommendations": {
+    "risk_level": "high",
+    "skip_validation": false,
+    "minimal_mode": false,
+    "test_types_required": ["unit", "integration", "e2e"],
+    "security_scan_required": false,
+    "staging_deployment_required": true,
+    "reasoning": "Infrastructure changes to Docker configuration require full validation. Container orchestration must be tested end-to-end to ensure all services start correctly and communicate properly. Staging deployment needed to verify the complete docker-compose stack works as expected."
+  },
+  "created_at": "2025-01-02T21:00:00Z"
+}

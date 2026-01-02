@@ -1,0 +1,164 @@
+{
+  "project_name": "AuthzAuthn Demo",
+  "project_type": "api",
+  "tech_stack": {
+    "primary_language": "Python",
+    "frameworks": ["FastAPI", "SQLAlchemy", "Alembic"],
+    "key_dependencies": [
+      "fastapi>=0.115.0",
+      "uvicorn",
+      "sqlalchemy>=2.0.36",
+      "asyncpg",
+      "pydantic",
+      "python-jose",
+      "opentelemetry-api",
+      "opentelemetry-sdk",
+      "structlog",
+      "pytest",
+      "keycloak"
+    ]
+  },
+  "target_audience": {
+    "primary_persona": "Backend developers and system architects building secure, compliant applications",
+    "secondary_personas": [
+      "Enterprise security engineers",
+      "Compliance officers in regulated industries",
+      "DevOps engineers deploying secure microservices",
+      "Technical leads evaluating authorization patterns"
+    ],
+    "pain_points": [
+      "Complex compliance requirements (HIPAA, SOC2, GDPR) demanding complete audit trails",
+      "Difficulty implementing fine-grained access control beyond simple RBAC",
+      "Security vulnerabilities from inconsistent authorization enforcement",
+      "Lack of immutable audit logs for forensic investigations",
+      "Frontend permission checks that can be bypassed",
+      "Difficulty tracking who did what and when in distributed systems"
+    ],
+    "goals": [
+      "Implement production-grade authorization with default-deny security",
+      "Maintain complete, tamper-proof audit trails for compliance",
+      "Enforce field-level data access control",
+      "Separate concerns between authentication (Keycloak) and authorization (application)",
+      "Demonstrate event-sourcing patterns for compliance-critical systems",
+      "Provide a reference implementation for secure backend architecture"
+    ],
+    "usage_context": "Used as a backend API service deployed in regulated environments (healthcare, finance, government) where data access control, auditability, and compliance are mandatory. The system serves as the single source of truth for authorization decisions, with multiple role-specific frontend applications (Operator, Supervisor, Auditor, Admin) consuming its namespaced APIs."
+  },
+  "product_vision": {
+    "one_liner": "A production-ready, event-sourced authorization/authentication platform demonstrating compliance-first security with ABAC, immutable audit trails, and role-isolated APIs.",
+    "problem_statement": "Organizations in regulated industries struggle to implement authorization systems that meet compliance requirements while remaining maintainable. Traditional RBAC systems lack granularity, frontend-only security is easily bypassed, and achieving complete audit trails requires complex custom code.",
+    "value_proposition": "Provides a battle-tested reference implementation combining event sourcing, ABAC policy enforcement, and append-only audit logs in a single platform. Unlike simple auth libraries, this demonstrates how to build truly secure, auditable systems where the backend is the single source of truth and every action is traceable.",
+    "success_metrics": [
+      "All 122 tests passing with comprehensive coverage of auth, workflows, and edge cases",
+      "Zero security vulnerabilities in authorization enforcement paths",
+      "Complete audit trail for all state changes with immutable event history",
+      "Clear separation between authentication (Keycloak) and authorization (ABAC engine)",
+      "Field-level filtering working correctly for all roles",
+      "Performance benchmarks meeting production requirements (<100ms for auth checks)",
+      "Documentation enabling other developers to understand and extend the system",
+      "Adoption as reference implementation in security-focused developer communities"
+    ]
+  },
+  "current_state": {
+    "maturity": "mvp",
+    "existing_features": [
+      "ABAC Policy Engine with role-scope mappings and constraint validation",
+      "Event Sourcing architecture with append-only event store",
+      "Immutable event history with database-level constraints",
+      "Workflow handlers (create, submit, confirm, reject, correct)",
+      "Field-level response filtering based on user roles",
+      "Complete audit logging service",
+      "Rate limiting middleware (token bucket algorithm)",
+      "Error handling with sanitized production messages",
+      "JWT authentication with Keycloak integration",
+      "Role-namespaced API endpoints (operator, supervisor, auditor, admin)",
+      "CQRS pattern with read model projections",
+      "Comprehensive test suite (122 tests passing)",
+      "Interactive testing UI at http://localhost:8000",
+      "OpenAPI documentation (/docs, /redoc)",
+      "Docker Compose setup with PostgreSQL, Keycloak, Prometheus, Grafana"
+    ],
+    "known_gaps": [
+      "Date filtering in auditor endpoints (TODO noted in code)",
+      "No user management UI (admin endpoints likely incomplete)",
+      "Missing pagination on list endpoints",
+      "No metrics/monitoring dashboard integration",
+      "No automated backup/recovery procedures for event store",
+      "No distributed tracing implementation (OTel instrumented but not fully utilized)",
+      "No API rate limiting per-user granularity (currently IP-based)",
+      "No webhook/event notification system for external integrations",
+      "No data export or reporting features for auditors",
+      "No multi-tenancy support"
+    ],
+    "technical_debt": [
+      "Single developer project - needs code review and pair programming",
+      "Limited integration testing (mostly unit tests)",
+      "No load testing or performance benchmarks documented",
+      "No disaster recovery procedures documented",
+      "Database migrations not production-tested",
+      "Error messages may leak information in debug mode",
+      "No feature flag system for gradual rollouts",
+      "Static testing UI not production-ready",
+      "No automated security scanning in CI/CD"
+    ]
+  },
+  "competitive_context": {
+    "alternatives": [
+      "Auth0 - SaaS authentication/authorization with RBAC",
+      "Okta - Enterprise identity management with adaptive MFA",
+      "AWS Cognito - Managed user identity and access control",
+      "Keycloak standalone - Open source identity provider with RBAC",
+      "Spring Security - Java security framework with RBAC/ABAC",
+      "Casbin - Open source access control library",
+      "OPA (Open Policy Agent) - General-purpose policy engine",
+      "Custom RBAC implementations in application code"
+    ],
+    "differentiators": [
+      "Event sourcing architecture provides immutable audit trail (most alternatives use mutable state)",
+      "True backend-only authorization (no frontend bypass vulnerabilities)",
+      "Role-namespaced API design prevents privilege escalation",
+      "Field-level filtering built into core (not an add-on)",
+      "Append-only event store with database-level immutability constraints",
+      "ABAC with constraint validation (vs simple role checks)",
+      "Reference implementation showing complete patterns (vs black-box SaaS)",
+      "Self-hosted and data-ownership focused (vs vendor lock-in)"
+    ],
+    "market_position": "Educational reference implementation and prototype for regulated industries. Positioned as a 'show, don't just tell' demonstration of how to build compliance-first auth systems. Not competing directly with Auth0/Okta, but serving as a learning resource and starting point for teams who need custom, self-hosted solutions.",
+    "competitor_pain_points": [
+      "SaaS solutions (Auth0, Okta) have data residency concerns and vendor lock-in",
+      "Traditional RBAC lacks granularity for complex permission scenarios",
+      "Frontend auth checks are easily bypassed with API tools",
+      "Audit logs in many systems are mutable and can be tampered with",
+      "Compliance reporting requires complex custom integrations",
+      "Self-hosted Keycloak requires significant setup and doesn't provide application-level authorization",
+      "Casbin/OPA require significant integration work and don't provide end-to-end patterns"
+    ],
+    "competitor_analysis_available": false
+  },
+  "constraints": {
+    "technical": [
+      "Requires Python 3.12+",
+      "Requires PostgreSQL with asyncpg driver",
+      "Requires Keycloak instance for OAuth2/OIDC",
+      "Event store schema requires database triggers for immutability",
+      "Not suitable for serverless environments (requires persistent database connections)",
+      "Limited to PostgreSQL (not database-agnostic due to async constraints)"
+    ],
+    "resources": [
+      "Solo developer (single git contributor)",
+      "Early-stage project (only initial commit)",
+      "No dedicated QA team",
+      "No product manager or designer",
+      "Development time limited by single developer capacity"
+    ],
+    "dependencies": [
+      "Keycloak must be running and configured",
+      "PostgreSQL database must be available",
+      "Environment variables must be properly configured",
+      "SSL/TLS certificates required for production Keycloak",
+      "Network connectivity between backend and Keycloak",
+      "Database migration tool (Alembic) must be run manually"
+    ]
+  },
+  "created_at": "2026-01-02T08:03:37Z"
+}

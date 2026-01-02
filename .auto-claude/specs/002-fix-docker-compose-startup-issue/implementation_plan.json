@@ -1,0 +1,549 @@
+{
+  "feature": "Fix Docker Compose Startup Issue",
+  "workflow_type": "feature",
+  "workflow_rationale": "This is a feature implementation task because we're enabling Docker deployment capability. The task involves fixing Docker configuration to make the existing application run properly in containerized environment. While it fixes a bug, the primary goal is to enable a new deployment method (docker-compose).",
+  "phases": [
+    {
+      "id": "phase-1-diagnose",
+      "name": "Diagnose Container Startup Issue",
+      "type": "investigation",
+      "description": "Verify the root cause of Docker container startup failure by examining logs and testing current configuration",
+      "depends_on": [],
+      "parallel_safe": true,
+      "subtasks": [
+        {
+          "id": "subtask-1-1",
+          "description": "Test current Docker build to confirm the issue",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "command",
+            "command": "docker-compose build backend 2>&1 | tee build.log",
+            "expected": "Successfully built"
+          },
+          "status": "completed",
+          "notes": "Successfully diagnosed the Docker build issue. Confirmed that Dockerfile line 25 is missing 'COPY ./static ./static'. Static files exist locally (static/index.html 46KB, README.md 9.5KB). FastAPI app expects static/ directory for UI mounting. Container will build successfully but UI will return 404 errors. Created diagnostic-summary.md with detailed analysis. See build-progress.txt for full findings.",
+          "updated_at": "2026-01-02T15:40:38.692965+00:00"
+        },
+        {
+          "id": "subtask-1-2",
+          "description": "Verify static files directory exists locally",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "command",
+            "command": "ls -la static/ && echo \"Static files present\"",
+            "expected": "Static files present"
+          },
+          "status": "completed",
+          "notes": "✅ VERIFIED: Static files directory exists locally with index.html (46,508 bytes) and README.md (9,757 bytes). Verification command passed successfully.",
+          "updated_at": "2026-01-02T15:45:00.000000+00:00"
+        },
+        {
+          "id": "subtask-1-3",
+          "description": "Check what's actually in the Docker image",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "command",
+            "command": "docker run --rm --entrypoint ls authz-authn-backend -la /app",
+            "expected": "app directory should be listed but static will be missing"
+          },
+          "status": "pending",
+          "notes": "This confirms the root hypothesis - static dir not copied"
+        }
+      ]
+    },
+    {
+      "id": "phase-2-fix-dockerfile",
+      "name": "Fix Dockerfile Configuration",
+      "type": "implementation",
+      "description": "Update Dockerfile to copy static files into the image and verify all required files are included",
+      "depends_on": [
+        "phase-1-diagnose"
+      ],
+      "parallel_safe": false,
+      "subtasks": [
+        {
+          "id": "subtask-2-1",
+          "description": "Add static directory copy to Dockerfile",
+          "service": "main",
+          "files_to_modify": [
+            "Dockerfile"
+          ],
+          "files_to_create": [],
+          "patterns_from": [
+            "Dockerfile"
+          ],
+          "verification": {
+            "type": "command",
+            "command": "grep -n \"COPY ./static\" Dockerfile",
+            "expected": "COPY ./static ./static line should exist"
+          },
+          "status": "pending",
+          "notes": "Add 'COPY ./static ./static' after 'COPY ./app ./app' line, before USER appuser"
+        },
+        {
+          "id": "subtask-2-2",
+          "description": "Verify Dockerfile COPY commands are in correct order",
+          "service": "main",
+          "files_to_modify": [
+            "Dockerfile"
+          ],
+          "files_to_create": [],
+          "patterns_from": [
+            "Dockerfile"
+          ],
+          "verification": {
+            "type": "command",
+            "command": "grep -E \"^(COPY|USER)\" Dockerfile",
+            "expected": "COPY commands should come before USER appuser"
+          },
+          "status": "pending",
+          "notes": "All COPY commands must happen before switching to non-root user"
+        },
+        {
+          "id": "subtask-2-3",
+          "description": "Fix static directory ownership for non-root user",
+          "service": "main",
+          "files_to_modify": [
+            "Dockerfile"
+          ],
+          "files_to_create": [],
+          "patterns_from": [
+            "Dockerfile"
+          ],
+          "verification": {
+            "type": "command",
+            "command": "grep -A 1 \"RUN useradd\" Dockerfile | grep chown",
+            "expected": "chown command should include both app and static directories"
+          },
+          "status": "pending",
+          "notes": "Update 'chown -R appuser:appuser /app' to include static/ directory"
+        }
+      ]
+    },
+    {
+      "id": "phase-3-build-and-verify",
+      "name": "Build and Verify Docker Image",
+      "type": "implementation",
+      "description": "Rebuild Docker image and verify static files are included correctly",
+      "depends_on": [
+        "phase-2-fix-dockerfile"
+      ],
+      "parallel_safe": false,
+      "subtasks": [
+        {
+          "id": "subtask-3-1",
+          "description": "Rebuild Docker image with no cache",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "command",
+            "command": "docker-compose build --no-cache backend 2>&1 | tail -20",
+            "expected": "Successfully built and tagged image"
+          },
+          "status": "pending",
+          "notes": "Clean rebuild to ensure all changes are applied"
+        },
+        {
+          "id": "subtask-3-2",
+          "description": "Verify static files exist in rebuilt image",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "command",
+            "command": "docker run --rm --entrypoint ls authz-authn-backend -la /app/static",
+            "expected": "index.html should be listed"
+          },
+          "status": "pending",
+          "notes": "Confirms static files were successfully copied into image"
+        }
+      ]
+    },
+    {
+      "id": "phase-4-integration-test",
+      "name": "Integration Testing with docker-compose",
+      "type": "integration",
+      "description": "Start all services via docker-compose and verify complete functionality",
+      "depends_on": [
+        "phase-3-build-and-verify"
+      ],
+      "parallel_safe": false,
+      "subtasks": [
+        {
+          "id": "subtask-4-1",
+          "description": "Start docker-compose services and verify startup",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "e2e",
+            "steps": [
+              "Run 'docker-compose up -d'",
+              "Wait 30 seconds for all services to start",
+              "Run 'docker-compose ps' to verify all services are running",
+              "Check backend service status shows 'Up' (not 'Exited' or restarting)"
+            ]
+          },
+          "status": "pending",
+          "notes": "All services (postgres, keycloak, backend) should be running"
+        },
+        {
+          "id": "subtask-4-2",
+          "description": "Verify backend health endpoint responds",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "api",
+            "method": "GET",
+            "url": "http://localhost:8000/health",
+            "expected_status": 200,
+            "expected_body_contains": [
+              "healthy",
+              "authz-authn-demo"
+            ]
+          },
+          "status": "pending",
+          "notes": "Confirms FastAPI app is running and responding"
+        },
+        {
+          "id": "subtask-4-3",
+          "description": "Verify UI static files are accessible",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "api",
+            "method": "GET",
+            "url": "http://localhost:8000/static/index.html",
+            "expected_status": 200,
+            "expected_body_contains": [
+              "<!DOCTYPE html>",
+              "<html"
+            ]
+          },
+          "status": "pending",
+          "notes": "Confirms static files are being served correctly"
+        },
+        {
+          "id": "subtask-4-4",
+          "description": "Verify root URL redirects to UI",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "api",
+            "method": "GET",
+            "url": "http://localhost:8000/",
+            "expected_status": 200,
+            "expected_body_contains": [
+              "<!DOCTYPE html>"
+            ]
+          },
+          "status": "pending",
+          "notes": "Confirms redirect to /static/index.html works"
+        },
+        {
+          "id": "subtask-4-5",
+          "description": "Verify API documentation is accessible",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "browser",
+            "url": "http://localhost:8000/docs",
+            "checks": [
+              "Swagger UI renders",
+              "API endpoints are listed",
+              "No 404 errors"
+            ]
+          },
+          "status": "pending",
+          "notes": "Confirms FastAPI auto-generated docs work"
+        },
+        {
+          "id": "subtask-4-6",
+          "description": "Verify no database connection errors in logs",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "command",
+            "command": "docker-compose logs backend 2>&1 | grep -i \"error\\|exception\" | head -20 || echo 'No errors found'",
+            "expected": "No critical database connection errors"
+          },
+          "status": "pending",
+          "notes": "Backend should connect to postgres successfully"
+        },
+        {
+          "id": "subtask-4-7",
+          "description": "Verify all services can communicate",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "command",
+            "command": "docker-compose ps",
+            "expected": "All services show 'Up' status"
+          },
+          "status": "pending",
+          "notes": "Final verification of complete stack"
+        }
+      ]
+    },
+    {
+      "id": "phase-5-validation",
+      "name": "Validation and Cleanup",
+      "type": "cleanup",
+      "description": "Final validation checks and cleanup",
+      "depends_on": [
+        "phase-4-integration-test"
+      ],
+      "parallel_safe": false,
+      "subtasks": [
+        {
+          "id": "subtask-5-1",
+          "description": "Run container restart test to verify persistence",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "e2e",
+            "steps": [
+              "Run 'docker-compose restart backend'",
+              "Wait 15 seconds for container to restart",
+              "Run 'curl -f http://localhost:8000/health'",
+              "Verify health check returns 200 OK"
+            ]
+          },
+          "status": "pending",
+          "notes": "Ensures container can restart without issues"
+        },
+        {
+          "id": "subtask-5-2",
+          "description": "Verify docker-compose configuration is valid",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "command",
+            "command": "docker-compose config >/dev/null && echo 'Config valid'",
+            "expected": "Config valid"
+          },
+          "status": "pending",
+          "notes": "Confirms YAML syntax is correct"
+        },
+        {
+          "id": "subtask-5-3",
+          "description": "Document the changes made",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "manual",
+            "instructions": "Review Dockerfile changes and ensure static/ directory is properly copied and owned by appuser"
+          },
+          "status": "pending",
+          "notes": "Create summary of changes for documentation"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_phases": 5,
+    "total_subtasks": 17,
+    "services_involved": [
+      "main",
+      "postgres",
+      "keycloak"
+    ],
+    "parallelism": {
+      "max_parallel_phases": 1,
+      "parallel_groups": [],
+      "recommended_workers": 1,
+      "speedup_estimate": "Sequential execution - dependencies require single worker"
+    },
+    "startup_command": "source auto-claude/.venv/bin/activate && python auto-claude/run.py --spec 002 --parallel 1"
+  },
+  "verification_strategy": {
+    "risk_level": "high",
+    "skip_validation": false,
+    "test_creation_phase": "post_implementation",
+    "test_types_required": [
+      "unit",
+      "integration",
+      "e2e"
+    ],
+    "security_scanning_required": false,
+    "staging_deployment_required": true,
+    "acceptance_criteria": [
+      "Dockerfile copies both app/ and static/ directories",
+      "Static files are owned by appuser (non-root)",
+      "docker-compose up starts all services successfully",
+      "Backend container remains running without restart loops",
+      "Health check endpoint returns 200 OK",
+      "UI is accessible at http://localhost:8000/",
+      "API documentation loads at /docs",
+      "No database connection errors in logs",
+      "All services show 'Up' status in docker-compose ps"
+    ],
+    "verification_steps": [
+      {
+        "name": "Docker Build Verification",
+        "command": "docker-compose build --no-cache backend",
+        "expected_outcome": "Build completes successfully with no errors",
+        "type": "test",
+        "required": true,
+        "blocking": true
+      },
+      {
+        "name": "Static Files in Image",
+        "command": "docker run --rm --entrypoint ls authz-authn-backend -la /app/static",
+        "expected_outcome": "index.html and other static files are present",
+        "type": "test",
+        "required": true,
+        "blocking": true
+      },
+      {
+        "name": "Container Startup Test",
+        "command": "docker-compose up -d && sleep 30 && docker-compose ps",
+        "expected_outcome": "All services show 'Up' status",
+        "type": "integration",
+        "required": true,
+        "blocking": true
+      },
+      {
+        "name": "Health Check API Test",
+        "command": "curl -f http://localhost:8000/health || exit 1",
+        "expected_outcome": "Returns 200 OK with status: healthy",
+        "type": "integration",
+        "required": true,
+        "blocking": true
+      },
+      {
+        "name": "UI Accessibility Test",
+        "command": "curl -f http://localhost:8000/static/index.html | grep '<!DOCTYPE html>' || exit 1",
+        "expected_outcome": "HTML content is returned",
+        "type": "integration",
+        "required": true,
+        "blocking": true
+      },
+      {
+        "name": "API Documentation Test",
+        "command": "curl -f http://localhost:8000/docs | grep 'swagger-ui' || exit 1",
+        "expected_outcome": "Swagger UI page loads",
+        "type": "integration",
+        "required": true,
+        "blocking": true
+      },
+      {
+        "name": "Container Restart Test",
+        "command": "docker-compose restart backend && sleep 15 && curl -f http://localhost:8000/health",
+        "expected_outcome": "Container restarts and health check passes",
+        "type": "e2e",
+        "required": true,
+        "blocking": true
+      },
+      {
+        "name": "Log Verification",
+        "command": "docker-compose logs backend | grep -i 'error\\|fatal' || echo 'No errors found'",
+        "expected_outcome": "No critical errors in logs",
+        "type": "test",
+        "required": true,
+        "blocking": false
+      }
+    ],
+    "reasoning": "High risk because this is infrastructure/Docker configuration change. Container orchestration must be tested end-to-end to ensure all services start correctly and communicate properly. The complexity assessment indicates staging deployment is required to verify the complete docker-compose stack works as expected."
+  },
+  "qa_acceptance": {
+    "unit_tests": {
+      "required": true,
+      "commands": [
+        "docker-compose config >/dev/null",
+        "docker run --rm --entrypoint ls authz-authn-backend -la /app/static"
+      ],
+      "minimum_coverage": null
+    },
+    "integration_tests": {
+      "required": true,
+      "commands": [
+        "docker-compose up -d",
+        "curl -f http://localhost:8000/health",
+        "curl -f http://localhost:8000/static/index.html"
+      ],
+      "services_to_test": [
+        "main",
+        "postgres",
+        "keycloak"
+      ]
+    },
+    "e2e_tests": {
+      "required": true,
+      "commands": [
+        "docker-compose restart backend",
+        "curl -f http://localhost:8000/health"
+      ],
+      "flows": [
+        "container-startup",
+        "ui-accessibility",
+        "restart-resilience"
+      ]
+    },
+    "browser_verification": {
+      "required": true,
+      "pages": [
+        {
+          "url": "http://localhost:8000/",
+          "checks": [
+            "page-loads",
+            "no-console-errors",
+            "ui-visible"
+          ]
+        },
+        {
+          "url": "http://localhost:8000/docs",
+          "checks": [
+            "swagger-ui-renders",
+            "endpoints-listed"
+          ]
+        }
+      ]
+    },
+    "docker_verification": {
+      "required": true,
+      "checks": [
+        "docker-compose ps shows all services Up",
+        "backend container logs show no critical errors",
+        "static files exist in container at /app/static",
+        "health check passes within 30 seconds"
+      ]
+    }
+  },
+  "qa_signoff": null,
+  "status": "human_review",
+  "planStatus": "review",
+  "updated_at": "2026-01-02T15:37:16.834Z",
+  "last_updated": "2026-01-02T15:40:38.692974+00:00"
+}
