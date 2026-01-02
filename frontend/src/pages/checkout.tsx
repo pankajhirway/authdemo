@@ -15,6 +15,8 @@ import { OrderReview, OrderReviewSkeleton, type DeliveryMethod } from "../compon
 import { PaymentForm, PaymentFormSkeleton, type PaymentData } from "../components/checkout/PaymentForm";
 import { OrderConfirmation } from "../components/checkout/OrderConfirmation";
 import { useCart, useCartItems, useCartActions, useCartSummary } from "../store/cart";
+import { operatorApi } from "../lib/api";
+import type { CreateDataEntryRequest } from "../types/api";
 import { cn, formatCurrency } from "../lib/utils";
 
 /**
@@ -70,6 +72,7 @@ export function CheckoutPage() {
   const [orderInstructions, setOrderInstructions] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   /**
    * Redirect to cart if empty.
@@ -79,15 +82,6 @@ export function CheckoutPage() {
       navigate("/cart");
     }
   }, [cartItems.length, currentStep, navigate]);
-
-  /**
-   * Generate mock order ID.
-   */
-  const generateOrderId = (): string => {
-    const timestamp = Date.now().toString(36);
-    const random = Math.random().toString(36).substring(2, 8);
-    return `ord-${timestamp}-${random}`.toUpperCase();
-  };
 
   /**
    * Calculate final total with delivery fee.
@@ -132,17 +126,45 @@ export function CheckoutPage() {
 
   /**
    * Handle payment submission.
+   * Creates order in backend and submits for approval.
    */
   const handlePaymentSubmit = async (paymentData: PaymentData) => {
     setIsProcessing(true);
+    setError(null);
 
     try {
-      // Simulate payment processing
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Prepare order data for backend
+      const orderData: CreateDataEntryRequest = {
+        data: {
+          items: cartItems.map((item) => ({
+            menuItemId: item.menuItem.id,
+            name: item.menuItem.name,
+            price: item.menuItem.price,
+            quantity: item.quantity,
+            specialInstructions: item.specialInstructions || null,
+          })),
+          deliveryMethod,
+          deliveryFee: deliveryMethod === "delivery" ? DELIVERY_FEE : 0,
+          subtotal: cartSummary.subtotal,
+          tax: cartSummary.tax,
+          total: finalTotal,
+          customerName: DEMO_CUSTOMER_INFO.name,
+          customerEmail: DEMO_CUSTOMER_INFO.email,
+          customerPhone: DEMO_CUSTOMER_INFO.phone,
+          orderInstructions: orderInstructions || null,
+        },
+        entry_type: "order",
+      };
 
-      // Generate order ID
-      const newOrderId = generateOrderId();
-      setOrderId(newOrderId);
+      // Create order in backend
+      const createResponse = await operatorApi.createDataEntry(orderData);
+      const entryId = createResponse.entry_id;
+
+      // Submit order for approval
+      await operatorApi.submitDataEntry(entryId);
+
+      // Use the backend entry_id as order ID
+      setOrderId(entryId);
 
       // Move to confirmation step
       setCurrentStep("confirmation");
@@ -151,9 +173,10 @@ export function CheckoutPage() {
       clearCart();
 
       window.scrollTo({ top: 0, behavior: "smooth" });
-    } catch (error) {
-      // Handle payment error
-      console.error("Payment processing error:", error);
+    } catch (err) {
+      // Handle API error
+      const errorMessage = err instanceof Error ? err.message : "Failed to process order. Please try again.";
+      setError(errorMessage);
     } finally {
       setIsProcessing(false);
     }
@@ -366,12 +389,61 @@ export function CheckoutPage() {
             )}
 
             {currentStep === "payment" && (
-              <PaymentForm
-                total={finalTotal}
-                isProcessing={isProcessing}
-                onSubmit={handlePaymentSubmit}
-                onCancel={handlePaymentCancel}
-              />
+              <>
+                {/* Error display */}
+                {error && (
+                  <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <svg
+                        className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                      <div className="flex-1">
+                        <h3 className="text-sm font-semibold text-red-900 mb-1">
+                          Order Processing Error
+                        </h3>
+                        <p className="text-sm text-red-700">{error}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setError(null)}
+                        className="text-red-500 hover:text-red-700"
+                        aria-label="Dismiss error"
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                )}
+                <PaymentForm
+                  total={finalTotal}
+                  isProcessing={isProcessing}
+                  onSubmit={handlePaymentSubmit}
+                  onCancel={handlePaymentCancel}
+                />
+              </>
             )}
           </div>
 
