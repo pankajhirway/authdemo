@@ -20,8 +20,8 @@ import { useCurrentUser } from "../store/auth";
 import { useCartActions } from "../store/cart";
 import { OrderCard, OrderCardSkeleton } from "../components/orders/OrderCard";
 import { OrderDetails, OrderDetailsSkeleton } from "../components/orders/OrderDetails";
-import { StatusBadgeWithCount } from "../components/orders/StatusBadge";
-import type { Order, AllOrderStatus, OrderFilters } from "../types/order";
+import { OrderFilters } from "../components/orders/OrderFilters";
+import type { Order, AllOrderStatus, OrderFilters as OrderFiltersType } from "../types/order";
 import type { CartItem } from "../types/menu";
 
 /**
@@ -165,18 +165,110 @@ const MOCK_ORDERS: Order[] = [
     createdAt: new Date(Date.now() - 86400000 * 7).toISOString(), // 7 days ago
     updatedAt: new Date(Date.now() - 86400000 * 7).toISOString(),
   },
-];
-
-/**
- * Status filter options.
- */
-const STATUS_FILTERS = [
-  { value: null as AllOrderStatus | null, label: "All Orders" },
-  { value: "pending" as AllOrderStatus, label: "Pending" },
-  { value: "preparing" as AllOrderStatus, label: "Preparing" },
-  { value: "ready" as AllOrderStatus, label: "Ready" },
-  { value: "delivered" as AllOrderStatus, label: "Delivered" },
-  { value: "cancelled" as AllOrderStatus, label: "Cancelled" },
+  {
+    id: "550e8400-e29b-41d4-a716-446655440004",
+    items: [
+      {
+        menuItem: {
+          id: "1",
+          name: "Classic Cheeseburger",
+          description: "Juicy beef patty with cheddar cheese, lettuce, tomato, and pickles",
+          price: 12.99,
+          category: "entrees",
+          image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400",
+          available: true,
+          dietary: { vegetarian: false, vegan: false, glutenFree: false, containsNuts: false, spicy: false },
+          prepTimeMinutes: 15,
+        },
+        quantity: 1,
+      },
+    ],
+    status: "pending",
+    deliveryMethod: "delivery",
+    customer: {
+      name: "John Doe",
+      email: "john.doe@example.com",
+      phone: "+1 (555) 123-4567",
+    },
+    subtotal: 12.99,
+    tax: 1.04,
+    deliveryFee: 3.99,
+    total: 18.02,
+    createdBy: "user-123",
+    createdByUsername: "johndoe",
+    createdAt: new Date(Date.now() - 1800000).toISOString(), // 30 min ago
+    updatedAt: new Date(Date.now() - 1800000).toISOString(),
+  },
+  {
+    id: "550e8400-e29b-41d4-a716-446655440005",
+    items: [
+      {
+        menuItem: {
+          id: "7",
+          name: "Fish and Chips",
+          description: "Beer-battered cod with crispy fries and tartar sauce",
+          price: 15.99,
+          category: "entrees",
+          image: "https://images.unsplash.com/photo-1585699324551-f6c309eedeca?w=400",
+          available: true,
+          dietary: { vegetarian: false, vegan: false, glutenFree: false, containsNuts: false, spicy: false },
+          prepTimeMinutes: 18,
+        },
+        quantity: 1,
+      },
+    ],
+    status: "ready",
+    deliveryMethod: "pickup",
+    customer: {
+      name: "John Doe",
+      email: "john.doe@example.com",
+      phone: "+1 (555) 123-4567",
+    },
+    subtotal: 15.99,
+    tax: 1.28,
+    deliveryFee: 0,
+    total: 17.27,
+    createdBy: "user-123",
+    createdByUsername: "johndoe",
+    createdAt: new Date(Date.now() - 86400000 * 14).toISOString(), // 14 days ago
+    updatedAt: new Date(Date.now() - 86400000 * 14).toISOString(),
+    completedAt: new Date(Date.now() - 86400000 * 14 + 600000).toISOString(), // 10 min later
+  },
+  {
+    id: "550e8400-e29b-41d4-a716-446655440006",
+    items: [
+      {
+        menuItem: {
+          id: "11",
+          name: "Chocolate Lava Cake",
+          description: "Warm chocolate cake with molten center and vanilla ice cream",
+          price: 8.99,
+          category: "desserts",
+          image: "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=400",
+          available: true,
+          dietary: { vegetarian: true, vegan: false, glutenFree: false, containsNuts: false, spicy: false },
+          prepTimeMinutes: 15,
+        },
+        quantity: 2,
+      },
+    ],
+    status: "delivered",
+    deliveryMethod: "delivery",
+    customer: {
+      name: "John Doe",
+      email: "john.doe@example.com",
+      phone: "+1 (555) 123-4567",
+    },
+    subtotal: 17.98,
+    tax: 1.44,
+    deliveryFee: 3.99,
+    total: 23.41,
+    createdBy: "user-123",
+    createdByUsername: "johndoe",
+    createdAt: new Date(Date.now() - 86400000 * 25).toISOString(), // 25 days ago
+    updatedAt: new Date(Date.now() - 86400000 * 25).toISOString(),
+    completedAt: new Date(Date.now() - 86400000 * 25 + 1200000).toISOString(), // 20 min later
+  },
 ];
 
 /**
@@ -197,6 +289,8 @@ function OrdersPageContent() {
   const [error, setError] = useState<string | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [statusFilter, setStatusFilter] = useState<AllOrderStatus | null>(null);
+  const [startDateFilter, setStartDateFilter] = useState<string | null>(null);
+  const [endDateFilter, setEndDateFilter] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   /**
@@ -273,12 +367,39 @@ function OrdersPageContent() {
   }, []);
 
   /**
-   * Filter orders based on status and search query.
+   * Handle clear all filters.
+   */
+  const handleClearFilters = useCallback(() => {
+    setStatusFilter(null);
+    setStartDateFilter(null);
+    setEndDateFilter(null);
+    setSearchQuery("");
+  }, []);
+
+  /**
+   * Filter orders based on status, date range, and search query.
    */
   const filteredOrders = orders.filter((order) => {
     // Status filter
     if (statusFilter && order.status !== statusFilter) {
       return false;
+    }
+
+    // Date range filter
+    const orderDate = new Date(order.createdAt);
+    if (startDateFilter) {
+      const startDate = new Date(startDateFilter);
+      startDate.setHours(0, 0, 0, 0);
+      if (orderDate < startDate) {
+        return false;
+      }
+    }
+    if (endDateFilter) {
+      const endDate = new Date(endDateFilter);
+      endDate.setHours(23, 59, 59, 999);
+      if (orderDate > endDate) {
+        return false;
+      }
     }
 
     // Search filter
@@ -293,14 +414,6 @@ function OrdersPageContent() {
 
     return true;
   });
-
-  /**
-   * Get order count by status.
-   */
-  const getStatusCount = (status: AllOrderStatus | null) => {
-    if (!status) return orders.length;
-    return orders.filter((order) => order.status === status).length;
-  };
 
   /**
    * Show details view if an order is selected.
@@ -355,26 +468,16 @@ function OrdersPageContent() {
 
         {/* Filters and search */}
         <div className="mb-6 space-y-4">
-          {/* Status filter buttons */}
-          <div className="flex flex-wrap gap-2">
-            {STATUS_FILTERS.map((filter) => (
-              <button
-                key={filter.label}
-                type="button"
-                onClick={() => setStatusFilter(filter.value)}
-                className={cn(
-                  "transition-colors duration-200",
-                  "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                )}
-              >
-                <StatusBadgeWithCount
-                  status={filter.value || "pending"}
-                  count={getStatusCount(filter.value)}
-                  showIcon={statusFilter === filter.value}
-                />
-              </button>
-            ))}
-          </div>
+          {/* Order filters component */}
+          <OrderFilters
+            status={statusFilter}
+            startDate={startDateFilter}
+            endDate={endDateFilter}
+            onStatusChange={setStatusFilter}
+            onStartDateChange={setStartDateFilter}
+            onEndDateChange={setEndDateFilter}
+            onClearFilters={handleClearFilters}
+          />
 
           {/* Search bar */}
           <div className="relative">
@@ -495,10 +598,25 @@ function OrdersPageContent() {
             <p className="text-sm text-gray-600">
               Showing <span className="font-semibold text-gray-900">{filteredOrders.length}</span>{" "}
               {filteredOrders.length === 1 ? "order" : "orders"}
-              {statusFilter && (
+              {(statusFilter || startDateFilter || endDateFilter) && (
                 <>
                   {" "}
-                  in <span className="font-medium capitalize">{statusFilter}</span> status
+                  with filters:
+                  {statusFilter && (
+                    <span className="ml-1 px-2 py-0.5 rounded-md text-xs font-medium bg-blue-100 text-blue-800">
+                      Status: <span className="capitalize">{statusFilter}</span>
+                    </span>
+                  )}
+                  {startDateFilter && (
+                    <span className="ml-1 px-2 py-0.5 rounded-md text-xs font-medium bg-green-100 text-green-800">
+                      From: {new Date(startDateFilter).toLocaleDateString()}
+                    </span>
+                  )}
+                  {endDateFilter && (
+                    <span className="ml-1 px-2 py-0.5 rounded-md text-xs font-medium bg-purple-100 text-purple-800">
+                      To: {new Date(endDateFilter).toLocaleDateString()}
+                    </span>
+                  )}
                 </>
               )}
             </p>
