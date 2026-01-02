@@ -27,7 +27,7 @@
             "command": "grep -n \"localhost:3001\" app/main.py",
             "expected": "CORS_ORIGINS includes localhost:3001"
           },
-          "status": "pending"
+          "status": "completed"
         },
         {
           "id": "subtask-1-2",
@@ -43,7 +43,7 @@
             "command": "curl -s http://localhost:8000/health | head -20",
             "expected": "status: healthy"
           },
-          "status": "pending"
+          "status": "completed"
         }
       ]
     },
