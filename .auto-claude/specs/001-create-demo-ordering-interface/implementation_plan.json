@@ -366,7 +366,7 @@
             },
             "expected_status": 201
           },
-          "status": "pending"
+          "status": "completed"
         }
       ]
     },
