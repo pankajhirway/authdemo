@@ -1,0 +1,4 @@
+{
+  "task_description": "Make sure the application can be started using docker-compose including the UI.\nCurrently the docker image wont start.",
+  "workflow_type": "feature"
+}

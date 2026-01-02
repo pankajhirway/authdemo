@@ -1,0 +1,712 @@
+{
+  "id": "roadmap-20260102-083500",
+  "project_name": "AuthzAuthn Demo",
+  "version": "1.0",
+  "vision": "A production-ready, event-sourced authorization/authentication platform demonstrating compliance-first security with ABAC, immutable audit trails, and role-isolated APIs.",
+  "target_audience": {
+    "primary": "Backend developers and system architects building secure, compliant applications",
+    "secondary": [
+      "Enterprise security engineers",
+      "Compliance officers in regulated industries",
+      "DevOps engineers deploying secure microservices",
+      "Technical leads evaluating authorization patterns"
+    ]
+  },
+  "phases": [
+    {
+      "id": "phase-1",
+      "name": "Foundation - Complete MVP",
+      "description": "Complete the MVP by addressing known gaps and adding essential production readiness features. Focus on quick wins that improve usability and compliance capabilities.",
+      "order": 1,
+      "status": "planned",
+      "features": [
+        "feature-1",
+        "feature-2",
+        "feature-3",
+        "feature-4",
+        "feature-5",
+        "feature-6"
+      ],
+      "milestones": [
+        {
+          "id": "milestone-1-1",
+          "title": "Production-Ready API Surface",
+          "description": "All list endpoints support pagination and date filtering, enabling efficient data access for compliance reporting",
+          "features": [
+            "feature-1",
+            "feature-2"
+          ],
+          "status": "planned"
+        },
+        {
+          "id": "milestone-1-2",
+          "title": "Observability Baseline",
+          "description": "Metrics and monitoring integrated with existing Prometheus/Grafana stack for production visibility",
+          "features": [
+            "feature-4"
+          ],
+          "status": "planned"
+        },
+        {
+          "id": "milestone-1-3",
+          "title": "Enhanced Security Controls",
+          "description": "Granular rate limiting and data export capabilities for improved security and compliance",
+          "features": [
+            "feature-3",
+            "feature-5"
+          ],
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "phase-2",
+      "name": "Operational Excellence",
+      "description": "Establish operational resilience with automated testing, disaster recovery procedures, and security hardening. Make the system reliable and maintainable for production deployment.",
+      "order": 2,
+      "status": "planned",
+      "features": [
+        "feature-7",
+        "feature-8",
+        "feature-9",
+        "feature-10",
+        "feature-11"
+      ],
+      "milestones": [
+        {
+          "id": "milestone-2-1",
+          "title": "Security Hardening Complete",
+          "description": "Automated security scanning integrated into CI/CD pipeline with zero high/critical vulnerabilities",
+          "features": [
+            "feature-7"
+          ],
+          "status": "planned"
+        },
+        {
+          "id": "milestone-2-2",
+          "title": "Disaster Recovery Ready",
+          "description": "Automated backup and recovery procedures documented and tested for event store and database",
+          "features": [
+            "feature-8"
+          ],
+          "status": "planned"
+        },
+        {
+          "id": "milestone-2-3",
+          "title": "Performance Validated",
+          "description": "Load testing benchmarks established with performance optimization for auth checks under 100ms",
+          "features": [
+            "feature-9",
+            "feature-10"
+          ],
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "phase-3",
+      "name": "Enterprise Integration",
+      "description": "Add enterprise-grade features for external integrations, advanced compliance reporting, and production operations. Enable the system to scale in real-world deployments.",
+      "order": 3,
+      "status": "planned",
+      "features": [
+        "feature-12",
+        "feature-13",
+        "feature-14",
+        "feature-15",
+        "feature-16"
+      ],
+      "milestones": [
+        {
+          "id": "milestone-3-1",
+          "title": "Integration Platform Ready",
+          "description": "Webhook system and event streaming enable real-time notifications and external system integrations",
+          "features": [
+            "feature-12"
+          ],
+          "status": "planned"
+        },
+        {
+          "id": "milestone-3-2",
+          "title": "Advanced Compliance Tools",
+          "description": "Compliance report templates and event replay capabilities give auditors powerful investigation tools",
+          "features": [
+            "feature-13",
+            "feature-14"
+          ],
+          "status": "planned"
+        },
+        {
+          "id": "milestone-3-3",
+          "title": "Production Operations",
+          "description": "Feature flags enable gradual rollouts and blue-green deployments in production environments",
+          "features": [
+            "feature-15"
+          ],
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "phase-4",
+      "name": "Scale & Advanced Features",
+      "description": "Implement advanced capabilities for scalability, multi-tenancy, and enhanced user experience. Position the platform for growth and wider adoption.",
+      "order": 4,
+      "status": "planned",
+      "features": [
+        "feature-17",
+        "feature-18",
+        "feature-19",
+        "feature-20",
+        "feature-21"
+      ],
+      "milestones": [
+        {
+          "id": "milestone-4-1",
+          "title": "Multi-Tenant Architecture",
+          "description": "Tenant isolation and management enable SaaS deployment model with data segregation",
+          "features": [
+            "feature-17"
+          ],
+          "status": "planned"
+        },
+        {
+          "id": "milestone-4-2",
+          "title": "Enhanced Usability",
+          "description": "User management UI and distributed tracing improve operator experience and system observability",
+          "features": [
+            "feature-18",
+            "feature-19"
+          ],
+          "status": "planned"
+        },
+        {
+          "id": "milestone-4-3",
+          "title": "Reference Documentation",
+          "description": "Comprehensive guides and architecture documentation enable adoption as reference implementation",
+          "features": [
+            "feature-20",
+            "feature-21"
+          ],
+          "status": "planned"
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "id": "feature-1",
+      "title": "Pagination on All List Endpoints",
+      "description": "Add pagination support (cursor-based or offset-based) to all list endpoints across operator, supervisor, and auditor namespaces. Includes metadata for total count, page size, and next/prev cursors.",
+      "rationale": "Large datasets in production environments will cause performance issues and memory exhaustion without pagination. Compliance officers need efficient data access for audit reports. Addresses known gap directly.",
+      "priority": "must",
+      "complexity": "medium",
+      "impact": "high",
+      "phase_id": "phase-1",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "All list endpoints (/data in operator, supervisor, auditor) accept page and page_size parameters",
+        "Response includes pagination metadata (total_count, total_pages, next_page, prev_page)",
+        "Default page size is 50 with maximum of 100",
+        "Performance tests show consistent response times regardless of dataset size"
+      ],
+      "user_stories": [
+        "As a compliance officer, I want to paginate through large audit logs so that I can efficiently review data without timeouts",
+        "As a supervisor, I want to browse pending submissions in pages so that the UI remains responsive"
+      ]
+    },
+    {
+      "id": "feature-2",
+      "title": "Date Range Filtering in Auditor Endpoints",
+      "description": "Implement date range filtering for auditor list endpoints (/data, /audit) allowing queries by created_at, updated_at, or event_timestamp fields. Supports ISO 8601 date formats.",
+      "rationale": "Auditors need to retrieve events within specific timeframes for compliance reports and forensic investigations. This is explicitly marked as a TODO in the current codebase and is critical for regulated industries.",
+      "priority": "must",
+      "complexity": "low",
+      "impact": "high",
+      "phase_id": "phase-1",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Auditor /data endpoint accepts start_date and end_date query parameters",
+        "Auditor /audit endpoint accepts start_date and end_date query parameters",
+        "Dates support ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ)",
+        "Date queries leverage database indexes for sub-100ms response times"
+      ],
+      "user_stories": [
+        "As an auditor, I want to filter events by date range so that I can generate quarterly compliance reports",
+        "As a compliance officer, I want to retrieve all events from a specific incident timeframe for forensic analysis"
+      ]
+    },
+    {
+      "id": "feature-3",
+      "title": "Per-User Rate Limiting",
+      "description": "Enhance rate limiting from IP-based to per-user (JWT sub claim) rate limiting. Implements token bucket algorithm per-user with configurable limits and supports different limits per role.",
+      "rationale": "IP-based rate limiting is insufficient for multi-user environments (NAT, proxies). Per-user rate limiting prevents abuse while allowing legitimate high-volume users. Critical for production deployments where multiple users share IP addresses.",
+      "priority": "must",
+      "complexity": "medium",
+      "impact": "medium",
+      "phase_id": "phase-1",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Rate limit key is derived from JWT sub claim instead of IP address",
+        "Different rate limits configured for each role (operator: 60/min, supervisor: 120/min, auditor: 200/min, admin: 300/min)",
+        "Rate limit headers include remaining quota and reset time",
+        "Redis-backed rate limit state for horizontal scalability"
+      ],
+      "user_stories": [
+        "As a security engineer, I want per-user rate limiting so that one abusive user cannot affect others behind the same NAT",
+        "As a system admin, I want different rate limits per role so that auditors can query at higher volumes than operators"
+      ]
+    },
+    {
+      "id": "feature-4",
+      "title": "Metrics and Monitoring Dashboard Integration",
+      "description": "Integrate application metrics with existing Prometheus/Grafana stack. Add custom metrics for auth checks, authorization decisions, event processing, and business KPIs. Create pre-built Grafana dashboards.",
+      "rationale": "Production systems require observability to detect anomalies, troubleshoot issues, and measure performance. While Prometheus/Grafana are in docker-compose, no application metrics or dashboards are configured. Critical for operational excellence.",
+      "priority": "must",
+      "complexity": "medium",
+      "impact": "high",
+      "phase_id": "phase-1",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Prometheus metrics endpoint exposes auth_check_total, authorization_decision_total, event_processing_duration_seconds",
+        "Metrics include labels for role, scope, resource, decision (allow/deny), and error types",
+        "Pre-built Grafana dashboard displays auth metrics, system health, and business KPIs",
+        "Alerting rules configured for high denial rates and slow auth checks (>100ms)"
+      ],
+      "user_stories": [
+        "As a DevOps engineer, I want metrics dashboards so that I can monitor system health and detect issues proactively",
+        "As a security engineer, I want alerts on unusual denial patterns so that I can investigate potential attacks"
+      ]
+    },
+    {
+      "id": "feature-5",
+      "title": "Audit Log Data Export",
+      "description": "Add export functionality for auditors to download filtered event logs in CSV, JSON, or PDF formats. Includes support for scheduled exports and digital signing for integrity verification.",
+      "rationale": "Compliance officers need to export audit trails for regulatory submissions and archival. Without export capabilities, auditors must manually copy data, which is error-prone and inefficient. Addresses compliance reporting gap.",
+      "priority": "should",
+      "complexity": "medium",
+      "impact": "high",
+      "phase_id": "phase-1",
+      "dependencies": [
+        "feature-2"
+      ],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Auditor endpoints accept ?export=csv|json|pdf parameter for filtered data download",
+        "Exports include digital signature (HMAC or PGP) for integrity verification",
+        "Scheduled exports can be configured via admin endpoints (daily/weekly/monthly)",
+        "Exports support date range, role, and action filters"
+      ],
+      "user_stories": [
+        "As a compliance officer, I want to export audit logs to CSV so that I can submit them to regulators for HIPAA/SOC2 audits",
+        "As an auditor, I want digitally signed exports so that I can verify data integrity for legal proceedings"
+      ]
+    },
+    {
+      "id": "feature-6",
+      "title": "Admin User Management Endpoints",
+      "description": "Complete admin namespace endpoints for user lifecycle management: list users, create users, update roles, deactivate users, and view user permissions. Integrates with Keycloak Admin API for user management.",
+      "rationale": "Current admin endpoints are incomplete (noted in discovery as likely incomplete). Production systems require user management capabilities without needing to access Keycloak directly. Enables self-service user administration through the application API.",
+      "priority": "should",
+      "complexity": "high",
+      "impact": "medium",
+      "phase_id": "phase-1",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "GET /admin/users lists all users with pagination",
+        "POST /admin/users creates new users in Keycloak with default roles",
+        "PUT /admin/users/{user_id}/roles updates user role assignments",
+        "POST /admin/users/{user_id}/deactivate deactivates user accounts",
+        "GET /admin/users/{user_id}/permissions shows effective permissions for user"
+      ],
+      "user_stories": [
+        "As an admin, I want to manage users through the API so that I don't need to access Keycloak directly",
+        "As a system admin, I want to view a user's effective permissions so that I can troubleshoot access issues"
+      ]
+    },
+    {
+      "id": "feature-7",
+      "title": "Automated Security Scanning in CI/CD",
+      "description": "Integrate automated security tools (Snyk, Bandit, Semgrep) into CI/CD pipeline. Add pre-commit hooks for security linting. Implement security scan gating in GitHub Actions or GitLab CI.",
+      "rationale": "Security vulnerabilities in auth systems are catastrophic. Current technical debt notes no automated security scanning. For a security-focused product, automated scanning is essential to catch vulnerabilities before they reach production.",
+      "priority": "must",
+      "complexity": "medium",
+      "impact": "high",
+      "phase_id": "phase-2",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "CI/CD pipeline runs Snyk for dependency vulnerability scanning on every PR",
+        "Bandit runs for Python security linting with fail-on-error",
+        "Semgrep runs custom security rules for authorization bypass patterns",
+        "Pre-commit hooks include security linting for local developer feedback",
+        "Security scan results are reported in PR comments"
+      ],
+      "user_stories": [
+        "As a developer, I want automated security feedback so that I can catch vulnerabilities before merging code",
+        "As a security engineer, I want CI to block vulnerable code so that no security issues reach production"
+      ]
+    },
+    {
+      "id": "feature-8",
+      "title": "Automated Backup and Disaster Recovery",
+      "description": "Implement automated backup procedures for PostgreSQL event store and Keycloak database. Create runbook for disaster recovery including point-in-time recovery (PITR). Implement backup verification and restoration testing.",
+      "rationale": "Event store is the source of truth and must be protected. Current technical debt notes no automated backup/recovery procedures. For compliance-critical systems, data loss is unacceptable. Production readiness requires documented and tested recovery procedures.",
+      "priority": "must",
+      "complexity": "high",
+      "impact": "high",
+      "phase_id": "phase-2",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Automated daily backups of PostgreSQL database with retention policy (30 days)",
+        "Automated backups of Keycloak database and realm configuration",
+        "Point-in-time recovery (PITR) capability for PostgreSQL using WAL archiving",
+        "Disaster recovery runbook documented with step-by-step restoration procedures",
+        "Monthly restoration testing to verify backup integrity",
+        "Backups encrypted at rest with customer-managed encryption keys"
+      ],
+      "user_stories": [
+        "As a DevOps engineer, I want automated backups so that data is protected without manual intervention",
+        "As a system admin, I want a tested disaster recovery runbook so that I can restore service quickly after an outage"
+      ]
+    },
+    {
+      "id": "feature-9",
+      "title": "Load Testing and Performance Benchmarks",
+      "description": "Implement comprehensive load testing using Locust or k6. Establish performance benchmarks for auth checks (<100ms), authorization decisions (<50ms), and API throughput (>1000 req/s). Document baseline performance and regression testing.",
+      "rationale": "Current technical debt notes no load testing or performance benchmarks. Production deployments require understanding of system capacity and limits. Performance regression testing ensures optimizations don't degrade performance.",
+      "priority": "should",
+      "complexity": "medium",
+      "impact": "medium",
+      "phase_id": "phase-2",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Locust/k6 test scripts simulate realistic user workloads for all roles",
+        "Auth check median latency <100ms, p95 <200ms",
+        "Authorization decision median latency <50ms, p95 <100ms",
+        "System handles >1000 req/s with <1% error rate",
+        "Performance benchmarks documented in README",
+        "CI runs smoke load tests to detect performance regressions"
+      ],
+      "user_stories": [
+        "As a system architect, I want performance benchmarks so that I can plan capacity for production deployment",
+        "As a developer, I want automated performance regression tests so that I don't accidentally slow down the system"
+      ]
+    },
+    {
+      "id": "feature-10",
+      "title": "Database Query Optimization and Indexing",
+      "description": "Analyze and optimize database queries with proper indexing. Add composite indexes for common query patterns (role + status, date ranges, user filters). Implement query analysis and slow query monitoring.",
+      "rationale": "Pagination and date filtering will increase query complexity. Without proper indexing, performance will degrade as dataset grows. Optimizing queries early prevents production performance issues and enables scalability.",
+      "priority": "should",
+      "complexity": "medium",
+      "impact": "medium",
+      "phase_id": "phase-2",
+      "dependencies": [
+        "feature-1",
+        "feature-2"
+      ],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "EXPLAIN ANALYZE shows all queries use appropriate indexes",
+        "Composite indexes added for (role, status, created_at) query patterns",
+        "Slow query monitoring configured in PostgreSQL (>1second threshold)",
+        "Index maintenance strategy documented (reindex, vacuum analyze)",
+        "No sequential scans on production query patterns"
+      ],
+      "user_stories": [
+        "As a backend developer, I want optimized queries so that the system remains fast as data grows",
+        "As a DBA, I want monitoring for slow queries so that I can proactively optimize performance"
+      ]
+    },
+    {
+      "id": "feature-11",
+      "title": "Production Error Handling and Message Sanitization",
+      "description": "Audit and harden error handling to prevent information leakage in production mode. Ensure stack traces are only logged, not returned. Implement sanitized error messages for security-sensitive errors. Add error tracking integration (Sentry).",
+      "rationale": "Technical debt notes that error messages may leak information in debug mode. For a security product, information leakage in errors is a vulnerability. Production-ready systems must have secure error handling.",
+      "priority": "must",
+      "complexity": "low",
+      "impact": "medium",
+      "phase_id": "phase-2",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "All error responses in production mode contain sanitized messages (no stack traces, no internal details)",
+        "Security-sensitive errors (auth failures, authorization denials) return generic messages",
+        "Stack traces and details logged with appropriate log level for debugging",
+        "Sentry or similar error tracking integrated for production error monitoring",
+        "Error handling audit documents all error paths and their sanitization"
+      ],
+      "user_stories": [
+        "As a security engineer, I want sanitized error messages so that internal implementation details are not leaked to attackers",
+        "As a developer, I want error tracking so that I can monitor and fix production issues"
+      ]
+    },
+    {
+      "id": "feature-12",
+      "title": "Webhook and Event Notification System",
+      "description": "Implement webhook system for real-time event notifications to external systems. Supports configurable webhooks per event type, retry logic with exponential backoff, dead letter queue, and signature verification (HMAC).",
+      "rationale": "Enterprise systems need to integrate with external tools (SIEM, ticketing systems, monitoring). Current known gaps note no webhook/event notification system. Webhooks enable real-time integrations without polling.",
+      "priority": "should",
+      "complexity": "high",
+      "impact": "high",
+      "phase_id": "phase-3",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Admin endpoints to register, list, update, and delete webhook subscriptions",
+        "Webhooks can be filtered by event type (created, submitted, confirmed, rejected, corrected)",
+        "Webhook delivery includes HMAC signature header for verification",
+        "Failed webhook deliveries retry with exponential backoff (up to 5 retries)",
+        "Dead letter queue stores permanently failed webhooks for inspection",
+        "Webhook delivery status visible in admin UI"
+      ],
+      "user_stories": [
+        "As a security engineer, I want auth events sent to SIEM so that I can correlate with other security events",
+        "As a compliance officer, I want webhook notifications for critical events so that I can respond to incidents in real-time"
+      ]
+    },
+    {
+      "id": "feature-13",
+      "title": "Compliance Report Templates",
+      "description": "Add configurable report templates for common compliance frameworks (HIPAA, SOC2, GDPR). Reports include access logs, authorization decisions, data access patterns, and user activity summaries. Scheduled report generation with email delivery.",
+      "rationale": "Compliance officers need standardized reports for regulatory submissions. Current system lacks reporting features beyond raw data access. Pre-built templates reduce compliance burden and differentiate from competitors.",
+      "priority": "should",
+      "complexity": "high",
+      "impact": "high",
+      "phase_id": "phase-3",
+      "dependencies": [
+        "feature-5"
+      ],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "HIPAA report template covers access logs, data access, and audit trail requirements",
+        "SOC2 report template covers access review, change management, and audit evidence",
+        "GDPR report template covers data access records and consent tracking",
+        "Reports can be scheduled (daily/weekly/monthly) and delivered via email",
+        "Admins can customize report templates and add new frameworks"
+      ],
+      "user_stories": [
+        "As a compliance officer, I want HIPAA-compliant reports so that I can quickly respond to audit requests",
+        "As a security manager, I want scheduled SOC2 reports so that I can maintain continuous compliance evidence"
+      ]
+    },
+    {
+      "id": "feature-14",
+      "title": "Event Replay and State Reconstruction",
+      "description": "Implement event replay functionality to reconstruct read model state from event history. Includes time-travel queries (state at any point in time), selective replay (for specific aggregates), and replay verification tools.",
+      "rationale": "Event sourcing's key benefit is replayability, but current implementation lacks replay tools. For bug fixes and data corrections, replay capability is essential. Enables fixing bugs in projections without data loss. Addresses competitive differentiator.",
+      "priority": "should",
+      "complexity": "high",
+      "impact": "high",
+      "phase_id": "phase-3",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Admin endpoint to trigger event replay for specific aggregates or all entities",
+        "Time-travel query capability returns state as of any timestamp (historical queries)",
+        "Replay progress monitoring shows completion percentage and errors",
+        "Read model can be rebuilt from scratch for disaster recovery",
+        "Verification tools compare replayed state with current state to detect bugs"
+      ],
+      "user_stories": [
+        "As a developer, I want to replay events so that I can fix projection bugs without losing data",
+        "As an auditor, I want to query historical state so that I can see what data looked like at any point in time"
+      ]
+    },
+    {
+      "id": "feature-15",
+      "title": "Feature Flag System",
+      "description": "Implement feature flag system for gradual rollouts and A/B testing. Supports per-user, per-role, and percentage-based rollouts. Integrates with existing authorization system. Admin UI for flag management.",
+      "rationale": "Technical debt notes no feature flag system for gradual rollouts. Production systems need gradual rollouts to reduce risk. Feature flags enable canary releases, A/B testing, and instant rollbacks without deployment.",
+      "priority": "could",
+      "complexity": "medium",
+      "impact": "medium",
+      "phase_id": "phase-3",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Feature flags stored in database with schema (name, enabled, rollout_percentage, user_whitelist, role_whitelist)",
+        "Admin endpoints to create, update, delete, and list feature flags",
+        "Middleware checks flags before routing to protected features",
+        "Flag changes take effect immediately without restart",
+        "Audit logging tracks flag changes for compliance"
+      ],
+      "user_stories": [
+        "As a product manager, I want gradual rollouts so that I can test new features with a small audience first",
+        "As a developer, I want instant rollback capability so that I can disable problematic features without redeploying"
+      ]
+    },
+    {
+      "id": "feature-16",
+      "title": "Integration Testing Suite",
+      "description": "Expand testing beyond unit tests to comprehensive integration tests. Tests cover full workflows (create-submit-confirm), Keycloak integration, database transactions, and end-to-end API flows. Docker Compose test environment.",
+      "rationale": "Technical debt notes limited integration testing (mostly unit tests). Integration tests catch issues that unit tests miss (database constraints, transaction boundaries, external API calls). Critical for a compliance-focused system.",
+      "priority": "should",
+      "complexity": "medium",
+      "impact": "medium",
+      "phase_id": "phase-3",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Integration tests cover all workflows: create, submit, confirm, reject, correct",
+        "Tests validate Keycloak integration (JWT parsing, token validation)",
+        "Tests verify database constraints and event immutability",
+        "Tests run in isolated Docker Compose environment for CI/CD",
+        "Integration test coverage >80% of API endpoints"
+      ],
+      "user_stories": [
+        "As a developer, I want integration tests so that I can catch bugs that unit tests miss",
+        "As a QA engineer, I want comprehensive test coverage so that I can confidently verify system correctness"
+      ]
+    },
+    {
+      "id": "feature-17",
+      "title": "Multi-Tenancy Support",
+      "description": "Implement multi-tenancy with tenant isolation at database level. Each tenant has isolated data, policies, and users. Supports tenant provisioning, quota management, and per-tenant configuration. Subdomain or path-based routing.",
+      "rationale": "Current system has no multi-tenancy support. For SaaS deployment or service provider use cases, multi-tenancy is essential. Enables serving multiple customers/organizations from a single instance while maintaining data isolation.",
+      "priority": "could",
+      "complexity": "high",
+      "impact": "high",
+      "phase_id": "phase-4",
+      "dependencies": [
+        "feature-1",
+        "feature-6"
+      ],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Tenant table stores tenant configuration (name, domain, quotas, settings)",
+        "All data tables include tenant_id foreign key with row-level security",
+        "Tenant context resolved from subdomain or request header",
+        "Admin endpoints for tenant provisioning and management",
+        "Per-tenant rate limits and storage quotas",
+        "Tenant isolation verified with security tests (no cross-tenant data access)"
+      ],
+      "user_stories": [
+        "As a SaaS provider, I want multi-tenancy so that I can host multiple customers on a single instance",
+        "As a customer, I want data isolation so that my data is never accessible to other tenants"
+      ]
+    },
+    {
+      "id": "feature-18",
+      "title": "User Management UI",
+      "description": "Build a web-based user management interface for admins. Includes user list, create/edit user forms, role assignment, permission viewer, and audit log viewer. Uses existing API endpoints with authentication.",
+      "rationale": "Current testing UI is not production-ready. Admins need a user-friendly interface for user management without using API tools directly. A proper UI reduces operational overhead and errors compared to CLI/API operations.",
+      "priority": "could",
+      "complexity": "high",
+      "impact": "medium",
+      "phase_id": "phase-4",
+      "dependencies": [
+        "feature-6"
+      ],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Web UI accessible at /admin with JWT authentication",
+        "User list page with search, filters, and pagination",
+        "Create user form with role selection and attributes",
+        "Edit user page for role changes and deactivation",
+        "Permission viewer shows effective permissions for any user",
+        "Audit log viewer displays user activity history"
+      ],
+      "user_stories": [
+        "As an admin, I want a web UI so that I can manage users without using API tools",
+        "As a security manager, I want a permission viewer so that I can troubleshoot access issues"
+      ]
+    },
+    {
+      "id": "feature-19",
+      "title": "Distributed Tracing with OpenTelemetry",
+      "description": "Fully implement distributed tracing using OpenTelemetry instrumentation. Trace requests across Keycloak, PostgreSQL, and application layers. Export traces to Jaeger or similar. Trace context propagation for async operations.",
+      "rationale": "OTel is instrumented but not fully utilized per known gaps. Distributed tracing is essential for debugging microservices and understanding request flows. Critical for production troubleshooting and performance optimization.",
+      "priority": "could",
+      "complexity": "medium",
+      "impact": "medium",
+      "phase_id": "phase-4",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "All FastAPI endpoints instrumented with span creation",
+        "Database queries traced with SQL statements and parameters (sanitized)",
+        "Keycloak HTTP calls traced with full request/response metadata",
+        "Async operations propagate trace context properly",
+        "Traces exported to Jaeger with Docker Compose integration",
+        "Trace visualization available for debugging requests"
+      ],
+      "user_stories": [
+        "As a developer, I want distributed traces so that I can debug complex request flows across services",
+        "As a DevOps engineer, I want tracing integration so that I can quickly locate performance bottlenecks"
+      ]
+    },
+    {
+      "id": "feature-20",
+      "title": "Comprehensive Architecture Documentation",
+      "description": "Create detailed architecture documentation covering event sourcing patterns, CQRS implementation, ABAC engine design, security model, and deployment architecture. Includes diagrams, design decisions, and trade-off analysis.",
+      "rationale": "Success metric includes documentation enabling adoption as reference implementation. Current docs are minimal. Comprehensive documentation is essential for developers to understand and extend the system. Addresses educational goal.",
+      "priority": "should",
+      "complexity": "low",
+      "impact": "high",
+      "phase_id": "phase-4",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Architecture overview document explains event sourcing, CQRS, and ABAC patterns",
+        "Sequence diagrams show request flows for all workflows (create, submit, confirm)",
+        "Security model document explains threat model and security decisions",
+        "Deployment guide covers Docker Compose, Kubernetes, and cloud deployment",
+        "Design decision records (ADRs) document major architectural choices",
+        "Documentation is accessible in /docs or as README files"
+      ],
+      "user_stories": [
+        "As a new developer, I want architecture documentation so that I can understand the system quickly",
+        "As a system architect, I want design decisions documented so that I can evaluate this as a reference implementation"
+      ]
+    },
+    {
+      "id": "feature-21",
+      "title": "Developer Quick Start and Tutorial Guides",
+      "description": "Create developer-focused quick start guides and tutorials. Covers local development setup, adding new resources/roles, customizing policies, writing tests, and extending the system. Includes sample scenarios and common customization patterns.",
+      "rationale": "For adoption as a reference implementation, developers need clear guidance on how to use and extend the system. Good documentation reduces onboarding time and enables community contributions. Supports educational goal.",
+      "priority": "could",
+      "complexity": "low",
+      "impact": "medium",
+      "phase_id": "phase-4",
+      "dependencies": [
+        "feature-20"
+      ],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Quick start guide gets developers running locally in <15 minutes",
+        "Tutorial shows how to add a new resource type with full CRUD operations",
+        "Guide explains how to add new roles and define policy constraints",
+        "Testing guide shows how to write unit and integration tests",
+        "Customization examples cover common extension patterns",
+        "All guides tested by fresh developers for clarity"
+      ],
+      "user_stories": [
+        "As a new developer, I want a quick start guide so that I can get up and running quickly",
+        "As a contributor, I want extension tutorials so that I can add features confidently"
+      ]
+    }
+  ],
+  "metadata": {
+    "created_at": "2026-01-02T08:35:00Z",
+    "updated_at": "2026-01-02T08:13:41.865Z",
+    "generated_by": "roadmap_features agent",
+    "prioritization_framework": "MoSCoW",
+    "competitor_analysis_used": false,
+    "total_features": 21,
+    "priority_breakdown": {
+      "must": 8,
+      "should": 9,
+      "could": 4,
+      "wont": 0
+    }
+  }
+}
