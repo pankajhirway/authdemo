@@ -183,3 +183,20 @@ export interface ListAuditLogsParams {
   offset?: number;
   actor_id?: string;
 }
+
+/**
+ * System health check response (admin).
+ */
+export interface HealthCheckResponse {
+  status: string;
+  timestamp: string;
+}
+
+/**
+ * System metrics response (admin).
+ */
+export interface SystemMetricsResponse {
+  events_processed: number;
+  active_users: number;
+  projection_lag_seconds: number;
+}

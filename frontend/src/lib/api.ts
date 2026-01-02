@@ -16,6 +16,7 @@ import type {
   CreateDataEntryRequest,
   CreateDataEntryResponse,
   DataEntry,
+  HealthCheckResponse,
   ListAuditLogsParams,
   ListAuditLogsResponse,
   ListDataEntriesParams,
@@ -23,6 +24,7 @@ import type {
   RejectDataEntryRequest,
   RejectDataEntryResponse,
   SubmitDataEntryResponse,
+  SystemMetricsResponse,
   TokenData,
   UpdateDataEntryRequest,
   UpdateDataEntryResponse,
@@ -345,6 +347,24 @@ export const auditorApi = {
  * Admin API endpoints.
  */
 export const adminApi = {
+  /**
+   * Get system health check.
+   * GET /admin/health
+   */
+  getHealth: async (): Promise<HealthCheckResponse> => {
+    const response = await apiClient.get<HealthCheckResponse>("/admin/health");
+    return response.data;
+  },
+
+  /**
+   * Get system metrics.
+   * GET /admin/metrics
+   */
+  getMetrics: async (): Promise<SystemMetricsResponse> => {
+    const response = await apiClient.get<SystemMetricsResponse>("/admin/metrics");
+    return response.data;
+  },
+
   /**
    * Get admin settings.
    * GET /admin/settings
