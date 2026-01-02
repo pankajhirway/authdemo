@@ -1,0 +1,112 @@
+{
+  "task_description": "Build a realistic customer-facing demo UI for an ordering system that simulates actual production ordering workflows with high visual fidelity",
+  "files_to_modify": {
+    "main": [
+      "app/main.py"
+    ],
+    "frontend": [
+      "frontend/src/main.tsx",
+      "frontend/src/App.tsx",
+      "frontend/src/lib/api.ts",
+      "frontend/src/store/auth.ts",
+      "frontend/src/store/cart.ts",
+      "frontend/src/pages/menu.tsx",
+      "frontend/src/pages/cart.tsx",
+      "frontend/src/pages/checkout.tsx",
+      "frontend/src/pages/orders.tsx",
+      "frontend/src/pages/operator-dashboard.tsx",
+      "frontend/src/pages/supervisor-dashboard.tsx",
+      "frontend/src/pages/auditor-dashboard.tsx",
+      "frontend/src/pages/admin-dashboard.tsx"
+    ]
+  },
+  "files_to_create": {
+    "frontend": [
+      "frontend/vite.config.ts",
+      "frontend/tsconfig.json",
+      "frontend/package.json",
+      "frontend/.env",
+      "frontend/tailwind.config.js",
+      "frontend/src/lib/keycloak.ts",
+      "frontend/src/components/layout/Header.tsx",
+      "frontend/src/components/layout/Navigation.tsx",
+      "frontend/src/components/menu/MenuItemCard.tsx",
+      "frontend/src/components/cart/CartItem.tsx",
+      "frontend/src/components/orders/OrderCard.tsx",
+      "frontend/src/components/orders/StatusBadge.tsx",
+      "frontend/src/data/mockMenuItems.ts",
+      "frontend/src/data/mockOrders.ts"
+    ]
+  },
+  "files_to_reference": [
+    "app/api/routes/operator.py",
+    "app/api/routes/supervisor.py",
+    "app/api/routes/auditor.py",
+    "app/api/dependencies/auth.py",
+    "app/main.py"
+  ],
+  "patterns": {
+    "api_integration": "All API calls use /api/v1 prefix, JWT in Authorization header, async/await pattern",
+    "role_based_routing": "Backend has /operator, /supervisor, /auditor, /admin route prefixes with role-specific endpoints",
+    "authentication": "Keycloak OAuth2/OIDC, JWT token contains realm_access.roles array for role extraction",
+    "error_handling": "401 = redirect login, 403 = access denied, 422 = validation error, 500 = friendly message",
+    "cors": "Already configured for localhost:3001 in app/main.py"
+  },
+  "existing_implementations": {
+    "description": "Backend API fully implemented with role-based endpoints. No existing frontend - greenfield React project.",
+    "backend_api": {
+      "operator": {
+        "create": "POST /api/v1/operator/data",
+        "list_own": "GET /api/v1/operator/data",
+        "get_own": "GET /api/v1/operator/data/{id}",
+        "update": "PUT /api/v1/operator/data/{id}",
+        "submit": "POST /api/v1/operator/data/{id}/submit"
+      },
+      "supervisor": {
+        "list_all": "GET /api/v1/supervisor/data",
+        "get_any": "GET /api/v1/supervisor/data/{id}",
+        "confirm": "POST /api/v1/supervisor/data/{id}/confirm",
+        "reject": "POST /api/v1/supervisor/data/{id}/reject",
+        "correct": "POST /api/v1/supervisor/data/{id}/correct"
+      },
+      "auditor": {
+        "list_all": "GET /api/v1/auditor/data",
+        "get_any": "GET /api/v1/auditor/data/{id}",
+        "get_events": "GET /api/v1/auditor/data/{id}/events",
+        "audit_logs": "GET /api/v1/auditor/audit"
+      },
+      "admin": {
+        "health": "GET /health",
+        "metrics": "GET /api/v1/admin/metrics",
+        "settings": "GET /api/v1/admin/settings"
+      }
+    },
+    "relevant_files": [
+      "app/api/routes/operator.py",
+      "app/api/routes/supervisor.py",
+      "app/api/routes/auditor.py",
+      "app/api/routes/admin.py",
+      "app/api/dependencies/auth.py",
+      "app/main.py"
+    ]
+  },
+  "tech_stack": {
+    "backend": {
+      "language": "Python",
+      "framework": "FastAPI",
+      "orm": "SQLAlchemy",
+      "auth": "Keycloak OAuth2/OIDC",
+      "port": 8000
+    },
+    "frontend": {
+      "language": "TypeScript",
+      "framework": "React 18+",
+      "build_tool": "Vite",
+      "ui_library": "shadcn/ui + Radix UI",
+      "styling": "Tailwind CSS",
+      "state_management": "Zustand",
+      "http_client": "Axios",
+      "port": 3001
+    }
+  }
+}

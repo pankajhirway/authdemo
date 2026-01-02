@@ -1,0 +1,83 @@
+{
+  "project_root": "G:\\Development\\AuthzAuthnDemo",
+  "project_type": "single",
+  "services": {
+    "main": {
+      "name": "main",
+      "path": ".",
+      "language": "Python",
+      "framework": "FastAPI",
+      "type": "backend",
+      "package_manager": "pip",
+      "default_port": 8000,
+      "dev_command": "uvicorn app.main:app --reload --host 0.0.0.0 --port 8000",
+      "test_command": "pytest tests/",
+      "orm": "SQLAlchemy",
+      "database": "PostgreSQL",
+      "authentication": "Keycloak OAuth2/OIDC"
+    },
+    "frontend": {
+      "name": "frontend",
+      "path": "frontend",
+      "language": "TypeScript",
+      "framework": "React 18+",
+      "type": "frontend",
+      "build_tool": "Vite",
+      "package_manager": "npm",
+      "default_port": 3001,
+      "dev_command": "npm run dev",
+      "build_command": "npm run build",
+      "test_command": "npm test",
+      "ui_library": "shadcn/ui + Radix UI",
+      "styling": "Tailwind CSS",
+      "state_management": "Zustand",
+      "http_client": "Axios",
+      "authentication": "Keycloak JS Adapter or react-keycloak"
+    }
+  },
+  "infrastructure": {
+    "docker_compose": "docker-compose.yml",
+    "docker_services": ["postgres", "keycloak", "backend", "prometheus", "grafana"],
+    "dockerfile": "Dockerfile",
+    "database": "PostgreSQL",
+    "auth_provider": "Keycloak"
+  },
+  "conventions": {
+    "python_linting": "Ruff",
+    "python_formatter": "Ruff",
+    "python_testing": "pytest",
+    "frontend_linting": "ESLint",
+    "frontend_formatter": "Prettier",
+    "frontend_testing": "Vitest + Testing Library"
+  },
+  "api_endpoints": {
+    "base_url": "http://localhost:8000/api/v1",
+    "health": "http://localhost:8000/health",
+    "docs": "http://localhost:8000/docs",
+    "operator": {
+      "create": "POST /operator/data",
+      "list_own": "GET /operator/data",
+      "get_own": "GET /operator/data/{id}",
+      "update": "PUT /operator/data/{id}",
+      "submit": "POST /operator/data/{id}/submit"
+    },
+    "supervisor": {
+      "list_all": "GET /supervisor/data",
+      "get_any": "GET /supervisor/data/{id}",
+      "confirm": "POST /supervisor/data/{id}/confirm",
+      "reject": "POST /supervisor/data/{id}/reject",
+      "correct": "POST /supervisor/data/{id}/correct"
+    },
+    "auditor": {
+      "list_all": "GET /auditor/data",
+      "get_any": "GET /auditor/data/{id}",
+      "get_events": "GET /auditor/data/{id}/events",
+      "audit_logs": "GET /auditor/audit"
+    },
+    "admin": {
+      "health": "GET /health",
+      "metrics": "GET /admin/metrics",
+      "settings": "GET /admin/settings"
+    }
+  }
+}
