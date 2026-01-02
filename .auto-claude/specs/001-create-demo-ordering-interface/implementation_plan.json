@@ -169,7 +169,7 @@
             "type": "manual",
             "instructions": "Review keycloak.ts - Keycloak init, login, logout, and token refresh methods implemented"
           },
-          "status": "pending"
+          "status": "completed"
         },
         {
           "id": "subtask-3-3",
@@ -187,7 +187,7 @@
             "command": "cd frontend && npx tsc --noEmit src/store/auth.ts 2>&1 | head -10",
             "expected": "TypeScript compilation successful"
           },
-          "status": "pending"
+          "status": "completed"
         },
         {
           "id": "subtask-3-4",
