@@ -205,7 +205,7 @@
             "type": "manual",
             "instructions": "Review ProtectedRoute.tsx - redirects unauthenticated users, RequireRole checks user role"
           },
-          "status": "pending"
+          "status": "completed"
         },
         {
           "id": "subtask-3-5",
