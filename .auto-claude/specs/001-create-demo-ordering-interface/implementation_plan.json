@@ -82,7 +82,7 @@
             "command": "cd frontend && npm install && npm run dev -- --port 3001 & sleep 3 && curl -s http://localhost:3001 | head -20",
             "expected": "Vite dev server running"
           },
-          "status": "pending"
+          "status": "completed"
         },
         {
           "id": "subtask-2-2",
