@@ -1,237 +1,244 @@
-import { useState } from 'react'
-import { MainLayout } from './components/layout'
-import { ErrorBoundary } from './components/ui/ErrorBoundary'
-import { ToastProvider, useToast } from './components/ui/Toast'
-import {
-  LoadingSpinner,
-  LoadingSpinnerPage,
-  LoadingSpinnerInline,
-  LoadingCard,
-} from './components/ui/LoadingSpinner'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { MainLayout } from "./components/layout";
+import { ErrorBoundary } from "./components/ui/ErrorBoundary";
+import { ToastProvider } from "./components/ui/Toast";
+import { ProtectedRoute } from "./components/auth/ProtectedRoute";
+import { RequireRole } from "./components/auth/RequireRole";
+
+// Pages
+import { MenuPage } from "./pages/menu";
+import { CartPage } from "./pages/cart";
+import { CheckoutPage } from "./pages/checkout";
+import { OrdersPage } from "./pages/orders";
+import { LoginPage } from "./pages/login";
+import { CallbackPage } from "./pages/callback";
+import { OperatorDashboard } from "./pages/operator-dashboard";
+import { SupervisorDashboard } from "./pages/supervisor-dashboard";
+import { AuditorDashboard } from "./pages/auditor-dashboard";
+import { AdminDashboard } from "./pages/admin-dashboard";
 
 /**
- * Demo content component that demonstrates the UI components.
+ * Home page component.
+ *
+ * Landing page with welcome message and call to action.
  */
-function DemoContent() {
-  const [showLoading, setShowLoading] = useState(false)
-  const [showPageLoading, setShowPageLoading] = useState(false)
-  const toast = useToast()
-  const [count, setCount] = useState(0)
-
-  const handleShowToast = () => {
-    toast.success('Success!', { description: 'This is a success toast notification' })
-  }
-
-  const handleShowError = () => {
-    toast.error('Error occurred', { description: 'This is an error toast' })
-  }
-
-  const handleShowWarning = () => {
-    toast.warning('Warning', { description: 'This is a warning toast' })
-  }
-
-  const handleShowInfo = () => {
-    toast.info('Info', { description: 'This is an info toast' })
-  }
-
-  const handleShowLoading = () => {
-    setShowLoading(true)
-    setTimeout(() => setShowLoading(false), 2000)
-  }
-
-  const handleShowPageLoading = () => {
-    setShowPageLoading(true)
-    setTimeout(() => setShowPageLoading(false), 2000)
-  }
-
-  const handleTriggerError = () => {
-    throw new Error('This is a test error to demonstrate the ErrorBoundary')
-  }
-
-  if (showPageLoading) {
-    return <LoadingSpinnerPage message="Loading page content..." />
-  }
-
+function HomePage() {
   return (
     <div className="px-4 py-8 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="space-y-6">
-            {/* Welcome section */}
+        <div className="bg-white rounded-lg shadow-md p-8">
+          <div className="text-center space-y-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Demo Ordering Interface
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                Welcome to OrderDemo
               </h1>
-              <p className="text-gray-600 mt-2">
-                Customer-Facing Restaurant UI with Role-Based Authentication
+              <p className="text-xl text-gray-600">
+                A customer-facing restaurant ordering system with role-based authentication
               </p>
             </div>
 
-            {/* UI Components Demo */}
-            <div className="border-t border-gray-200 pt-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                UI Components Demo
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+              <h2 className="text-lg font-semibold text-blue-900 mb-3">
+                Demo Ordering Interface
               </h2>
-
-              {/* Toast Notifications */}
-              <div className="mb-6">
-                <h3 className="text-lg font-medium text-gray-800 mb-3">Toast Notifications</h3>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={handleShowToast}
-                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-                  >
-                    Success Toast
-                  </button>
-                  <button
-                    onClick={handleShowError}
-                    className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-                  >
-                    Error Toast
-                  </button>
-                  <button
-                    onClick={handleShowWarning}
-                    className="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-colors"
-                  >
-                    Warning Toast
-                  </button>
-                  <button
-                    onClick={handleShowInfo}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                  >
-                    Info Toast
-                  </button>
+              <p className="text-blue-800 mb-4">
+                This is a comprehensive demo showcasing a production-ready ordering system
+                with authentication, authorization, and role-based access control.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                <div className="bg-white rounded p-3">
+                  <div className="font-medium text-gray-900">Browse Menu</div>
+                  <div className="text-gray-600">18+ delicious items</div>
                 </div>
-              </div>
-
-              {/* Loading States */}
-              <div className="mb-6">
-                <h3 className="text-lg font-medium text-gray-800 mb-3">Loading States</h3>
-                <div className="flex flex-wrap gap-4 items-center">
-                  <LoadingSpinner size="sm" />
-                  <LoadingSpinner size="md" />
-                  <LoadingSpinner size="lg" />
-                  <button
-                    onClick={handleShowLoading}
-                    className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
-                  >
-                    {showLoading ? (
-                      <LoadingSpinnerInline text="Loading..." />
-                    ) : (
-                      'Show Inline Loading'
-                    )}
-                  </button>
-                  <button
-                    onClick={handleShowPageLoading}
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
-                  >
-                    Show Page Loading
-                  </button>
+                <div className="bg-white rounded p-3">
+                  <div className="font-medium text-gray-900">Add to Cart</div>
+                  <div className="text-gray-600">Easy quantity controls</div>
                 </div>
-              </div>
-
-              {/* Loading Variants */}
-              <div className="mb-6">
-                <h3 className="text-lg font-medium text-gray-800 mb-3">Loading Variants</h3>
-                <div className="flex flex-wrap gap-6 items-center">
-                  <div className="flex flex-col items-center gap-2">
-                    <LoadingSpinner variant="default" size="md" />
-                    <span className="text-xs text-gray-600">Default</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-2">
-                    <LoadingSpinner variant="pulse" size="md" />
-                    <span className="text-xs text-gray-600">Pulse</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-2">
-                    <LoadingSpinner variant="dots" size="md" />
-                    <span className="text-xs text-gray-600">Dots</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-2 w-32">
-                    <LoadingSpinner variant="bar" size="md" />
-                    <span className="text-xs text-gray-600">Bar</span>
-                  </div>
+                <div className="bg-white rounded p-3">
+                  <div className="font-medium text-gray-900">Checkout</div>
+                  <div className="text-gray-600">Multi-step payment flow</div>
                 </div>
-              </div>
-
-              {/* Loading Card */}
-              <div className="mb-6">
-                <h3 className="text-lg font-medium text-gray-800 mb-3">Loading Card</h3>
-                <div className="flex gap-4">
-                  <LoadingCard />
-                  <LoadingCard lines={4} />
+                <div className="bg-white rounded p-3">
+                  <div className="font-medium text-gray-900">Track Orders</div>
+                  <div className="text-gray-600">Real-time status updates</div>
                 </div>
-              </div>
-
-              {/* Error Boundary */}
-              <div className="mb-6">
-                <h3 className="text-lg font-medium text-gray-800 mb-3">Error Boundary</h3>
-                <p className="text-sm text-gray-600 mb-3">
-                  Click the button below to trigger an error and see the ErrorBoundary in action.
-                </p>
-                <button
-                  onClick={handleTriggerError}
-                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-                >
-                  Trigger Error
-                </button>
-              </div>
-
-              {/* Original Counter Demo */}
-              <div className="border-t border-gray-200 pt-6">
-                <h3 className="text-lg font-medium text-gray-800 mb-3">Original Demo</h3>
-                <button
-                  onClick={() => setCount((count) => count + 1)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                >
-                  Count is {count}
-                </button>
               </div>
             </div>
 
-            {/* Layout features showcase */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-              <div className="bg-green-50 border border-green-200 rounded-md p-4">
-                <h3 className="font-semibold text-green-900 mb-1">Header</h3>
-                <p className="text-sm text-green-800">
-                  Sticky header with cart indicator and user menu
-                </p>
-              </div>
-              <div className="bg-purple-50 border border-purple-200 rounded-md p-4">
-                <h3 className="font-semibold text-purple-900 mb-1">Navigation</h3>
-                <p className="text-sm text-purple-800">
-                  Role-based navigation with mobile responsive menu
-                </p>
-              </div>
-              <div className="bg-orange-50 border border-orange-200 rounded-md p-4">
-                <h3 className="font-semibold text-orange-900 mb-1">Footer</h3>
-                <p className="text-sm text-orange-800">
-                  Professional footer with links and branding
-                </p>
-              </div>
-              <div className="bg-amber-50 border border-amber-200 rounded-md p-4">
-                <h3 className="font-semibold text-amber-900 mb-1">Responsive</h3>
-                <p className="text-sm text-amber-800">
-                  Mobile-friendly design that works on all devices
-                </p>
-              </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="/menu"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                  />
+                </svg>
+                Browse Menu
+              </a>
+              <a
+                href="/login"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                  />
+                </svg>
+                Sign In
+              </a>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
+/**
+ * Main App component.
+ *
+ * Sets up React Router with all application routes.
+ * Includes protected routes and role-based access control.
+ */
 function App() {
   return (
     <ErrorBoundary>
       <ToastProvider position="top-right">
-        <MainLayout appName="OrderDemo">
-          <DemoContent />
-        </MainLayout>
+        <BrowserRouter>
+          <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<MainLayout appName="OrderDemo"><HomePage /></MainLayout>} />
+            <Route path="/login" element={<LoginPage />} />
+
+            {/* OAuth callback */}
+            <Route path="/callback" element={<CallbackPage />} />
+
+            {/* Protected routes - require authentication */}
+            <Route
+              path="/menu"
+              element={
+                <ProtectedRoute>
+                  <MainLayout appName="OrderDemo">
+                    <MenuPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/cart"
+              element={
+                <ProtectedRoute>
+                  <MainLayout appName="OrderDemo">
+                    <CartPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/checkout"
+              element={
+                <ProtectedRoute>
+                  <CheckoutPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/orders"
+              element={
+                <ProtectedRoute>
+                  <MainLayout appName="OrderDemo">
+                    <OrdersPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Operator dashboard - requires operator role */}
+            <Route
+              path="/operator"
+              element={
+                <ProtectedRoute>
+                  <RequireRole role="operator">
+                    <MainLayout appName="OrderDemo">
+                      <OperatorDashboard />
+                    </MainLayout>
+                  </RequireRole>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Supervisor dashboard - requires supervisor role */}
+            <Route
+              path="/supervisor"
+              element={
+                <ProtectedRoute>
+                  <RequireRole role="supervisor">
+                    <MainLayout appName="OrderDemo">
+                      <SupervisorDashboard />
+                    </MainLayout>
+                  </RequireRole>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Auditor dashboard - requires auditor role */}
+            <Route
+              path="/auditor"
+              element={
+                <ProtectedRoute>
+                  <RequireRole role="auditor">
+                    <MainLayout appName="OrderDemo">
+                      <AuditorDashboard />
+                    </MainLayout>
+                  </RequireRole>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Admin dashboard - requires admin role */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <RequireRole role="admin">
+                    <MainLayout appName="OrderDemo">
+                      <AdminDashboard />
+                    </MainLayout>
+                  </RequireRole>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Catch all - redirect to home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
       </ToastProvider>
     </ErrorBoundary>
-  )
+  );
 }
 
-export default App
+export default App;

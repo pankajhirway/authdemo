@@ -18,11 +18,13 @@ import { cn } from "../lib/utils";
 import { ProtectedRoute } from "../components/auth/ProtectedRoute";
 import { useCurrentUser } from "../store/auth";
 import { useCartActions } from "../store/cart";
+import { operatorApi } from "../lib/api";
 import { OrderCard, OrderCardSkeleton } from "../components/orders/OrderCard";
 import { OrderDetails, OrderDetailsSkeleton } from "../components/orders/OrderDetails";
 import { OrderFilters } from "../components/orders/OrderFilters";
 import type { Order, AllOrderStatus, OrderFilters as OrderFiltersType } from "../types/order";
 import type { CartItem } from "../types/menu";
+import { mockMenuItems } from "../data/mockMenuItems";
 
 /**
  * Mock order data for demonstration.
@@ -294,29 +296,95 @@ function OrdersPageContent() {
   const [searchQuery, setSearchQuery] = useState("");
 
   /**
-   * Fetch orders from the API.
-   * In production, this would call the real API.
+   * Convert backend DataEntry to Order format.
+   */
+  const convertDataEntryToOrder = useCallback((entry: any): Order => {
+    // Get menu items for the order
+    const orderItems = entry.data?.items || [];
+
+    // Build OrderItems by finding menu items from mock data
+    const items = orderItems.map((orderItem: any) => {
+      const menuItem = mockMenuItems.find(m => m.id === orderItem.menuItemId) || {
+        id: orderItem.menuItemId,
+        name: orderItem.name || "Unknown Item",
+        description: "",
+        price: orderItem.price || 0,
+        category: "entrees" as const,
+        image: "",
+        available: true,
+        dietary: { vegetarian: false, vegan: false, glutenFree: false, containsNuts: false, spicy: false },
+        prepTimeMinutes: 15,
+      };
+
+      return {
+        menuItem,
+        quantity: orderItem.quantity || 1,
+        specialInstructions: orderItem.specialInstructions || null,
+      };
+    });
+
+    // Map backend status to Order status
+    const statusMap: Record<string, AllOrderStatus> = {
+      "draft": "pending",
+      "submitted": "submitted",
+      "confirmed": "confirmed",
+      "rejected": "rejected",
+      "cancelled": "cancelled",
+    };
+
+    return {
+      id: entry.entry_id,
+      items,
+      status: statusMap[entry.status] || "pending",
+      deliveryMethod: entry.data?.deliveryMethod || "pickup",
+      customer: {
+        name: entry.data?.customerName || "Unknown",
+        email: entry.data?.customerEmail || "",
+        phone: entry.data?.customerPhone || "",
+      },
+      subtotal: entry.data?.subtotal || 0,
+      tax: entry.data?.tax || 0,
+      deliveryFee: entry.data?.deliveryFee || 0,
+      total: entry.data?.total || 0,
+      specialInstructions: entry.data?.orderInstructions || "",
+      createdBy: entry.created_by || "",
+      createdByUsername: entry.created_by_username || "",
+      createdAt: entry.created_at || new Date().toISOString(),
+      updatedAt: entry.updated_at || new Date().toISOString(),
+      completedAt: entry.completed_at ? entry.completed_at : undefined,
+    };
+  }, []);
+
+  /**
+   * Fetch orders from the backend API.
+   * Converts DataEntry responses to Order format for display.
    */
   const fetchOrders = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
     try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Fetch data entries from backend
+      const response = await operatorApi.listDataEntries({
+        limit: 100,
+      });
 
-      // In production, this would be:
-      // const response = await api.listOrders({ status: statusFilter ?? undefined });
-      // setOrders(response.items);
+      // Convert DataEntry[] to Order[]
+      const orders = response.items.map(convertDataEntryToOrder);
 
-      // For demo, use mock data
-      setOrders(MOCK_ORDERS);
+      // Sort by creation date (newest first)
+      orders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+      setOrders(orders);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load orders");
+      // On error, fall back to mock data for demo purposes
+      console.warn("Failed to fetch orders from backend, using mock data:", err);
+      setOrders(MOCK_ORDERS);
+      setError(null); // Don't show error for demo, fallback to mock
     } finally {
       setIsLoading(false);
     }
-  }, [statusFilter]);
+  }, [convertDataEntryToOrder]);
 
   /**
    * Initial fetch.
