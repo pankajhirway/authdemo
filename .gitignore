@@ -67,3 +67,6 @@ alembic/versions/*.py
 
 # Artifacts
 /artifacts/
+
+# Auto Claude data directory
+.auto-claude/

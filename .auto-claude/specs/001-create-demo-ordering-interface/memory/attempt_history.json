@@ -1,0 +1,345 @@
+{
+  "subtasks": {
+    "subtask-1-1": {
+      "attempts": [
+        {
+          "session": 1,
+          "timestamp": "2026-01-02T17:12:13.912478",
+          "approach": "Implemented: Verify CORS configuration includes localhost:3001",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-1-2": {
+      "attempts": [
+        {
+          "session": 2,
+          "timestamp": "2026-01-02T17:16:39.594592",
+          "approach": "Implemented: Test backend API endpoints are accessible",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-2-1": {
+      "attempts": [
+        {
+          "session": 3,
+          "timestamp": "2026-01-02T17:22:12.536012",
+          "approach": "Implemented: Create frontend directory structure and initialize Vite React project",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-2-2": {
+      "attempts": [
+        {
+          "session": 4,
+          "timestamp": "2026-01-02T17:28:10.363478",
+          "approach": "Implemented: Install and configure Tailwind CSS and shadcn/ui components",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-2-3": {
+      "attempts": [
+        {
+          "session": 5,
+          "timestamp": "2026-01-02T17:30:55.307578",
+          "approach": "Implemented: Install state management (Zustand) and HTTP client (Axios) dependencies",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-3-1": {
+      "attempts": [
+        {
+          "session": 6,
+          "timestamp": "2026-01-02T17:35:25.659678",
+          "approach": "Implemented: Create API client with axios instance and auth header injection",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-3-2": {
+      "attempts": [
+        {
+          "session": 7,
+          "timestamp": "2026-01-02T17:40:10.384062",
+          "approach": "Implemented: Create Keycloak authentication integration with login/logout and token management",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-3-3": {
+      "attempts": [
+        {
+          "session": 8,
+          "timestamp": "2026-01-02T17:43:10.414753",
+          "approach": "Implemented: Create Zustand auth store with user state and role checking",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-3-4": {
+      "attempts": [
+        {
+          "session": 9,
+          "timestamp": "2026-01-02T17:46:39.752887",
+          "approach": "Implemented: Create protected route wrapper component for role-based access control",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-3-5": {
+      "attempts": [
+        {
+          "session": 10,
+          "timestamp": "2026-01-02T17:51:12.631192",
+          "approach": "Implemented: Create login page with Keycloak redirect and callback handling",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-4-1": {
+      "attempts": [
+        {
+          "session": 11,
+          "timestamp": "2026-01-02T17:55:45.996163",
+          "approach": "Implemented: Create realistic mock menu items data with categories, prices, images",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-4-2": {
+      "attempts": [
+        {
+          "session": 12,
+          "timestamp": "2026-01-02T18:03:33.936563",
+          "approach": "Implemented: Create Zustand cart store with add/remove items and quantity management",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-4-3": {
+      "attempts": [
+        {
+          "session": 13,
+          "timestamp": "2026-01-02T18:08:57.531348",
+          "approach": "Implemented: Create menu/catalog page with item cards, category filters, and search",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-4-4": {
+      "attempts": [
+        {
+          "session": 14,
+          "timestamp": "2026-01-02T18:16:46.227922",
+          "approach": "Implemented: Create shopping cart page with item list, quantity controls, and total",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-4-5": {
+      "attempts": [
+        {
+          "session": 15,
+          "timestamp": "2026-01-02T18:22:03.662063",
+          "approach": "Implemented: Create checkout flow pages (review, payment mock, confirmation)",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-4-6": {
+      "attempts": [
+        {
+          "session": 16,
+          "timestamp": "2026-01-02T18:26:36.227786",
+          "approach": "Implemented: Connect checkout to backend API (create order and submit for approval)",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-5-1": {
+      "attempts": [
+        {
+          "session": 17,
+          "timestamp": "2026-01-02T18:33:06.425624",
+          "approach": "Implemented: Create Operator dashboard with order creation and order history",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-5-2": {
+      "attempts": [
+        {
+          "session": 18,
+          "timestamp": "2026-01-02T18:38:05.227563",
+          "approach": "Implemented: Create Supervisor dashboard with pending approvals and approve/reject actions",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-5-3": {
+      "attempts": [
+        {
+          "session": 19,
+          "timestamp": "2026-01-02T18:43:20.096820",
+          "approach": "Implemented: Create Auditor dashboard with read-only view of all orders and audit logs",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-5-4": {
+      "attempts": [
+        {
+          "session": 20,
+          "timestamp": "2026-01-02T18:49:58.006533",
+          "approach": "Implemented: Create Admin dashboard with system metrics and settings",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-6-1": {
+      "attempts": [
+        {
+          "session": 21,
+          "timestamp": "2026-01-02T19:02:29.716924",
+          "approach": "Implemented: Create order history page with list of past orders and status badges",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-6-2": {
+      "attempts": [
+        {
+          "session": 22,
+          "timestamp": "2026-01-02T19:07:26.923747",
+          "approach": "Implemented: Add order filtering by status and date range",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-7-1": {
+      "attempts": [
+        {
+          "session": 23,
+          "timestamp": "2026-01-02T19:15:57.805672",
+          "approach": "Implemented: Create main layout with Header, Navigation, and Footer components",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-7-4": {
+      "attempts": [
+        {
+          "session": 24,
+          "timestamp": "2026-01-02T19:22:54.971572",
+          "approach": "Implemented: Add loading states, error boundaries, and toast notifications for UX polish",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-8-1": {
+      "attempts": [
+        {
+          "session": 25,
+          "timestamp": "2026-01-02T19:26:55.998103",
+          "approach": "Implemented: End-to-end verification of ordering flow (browse \u2192 cart \u2192 checkout \u2192 submit)",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-8-2": {
+      "attempts": [
+        {
+          "session": 26,
+          "timestamp": "2026-01-02T19:34:15.255762",
+          "approach": "Implemented: End-to-end verification of supervisor approval flow",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-8-3": {
+      "attempts": [
+        {
+          "session": 27,
+          "timestamp": "2026-01-02T19:38:49.176529",
+          "approach": "Implemented: End-to-end verification of auditor read-only access",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-8-4": {
+      "attempts": [
+        {
+          "session": 28,
+          "timestamp": "2026-01-02T19:43:16.296563",
+          "approach": "Implemented: Verify role-based access control and unauthorized access handling",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "stuck_subtasks": [],
+  "metadata": {
+    "created_at": "2026-01-02T17:11:19.199004",
+    "last_updated": "2026-01-02T19:43:16.296572"
+  }
+}
