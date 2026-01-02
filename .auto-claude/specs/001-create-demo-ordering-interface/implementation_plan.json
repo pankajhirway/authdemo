@@ -271,7 +271,7 @@
             "command": "cd frontend && npm test -- src/store/cart.test.ts 2>&1 | tail -20",
             "expected": "Cart store tests pass"
           },
-          "status": "pending"
+          "status": "completed"
         },
         {
           "id": "subtask-4-3",
