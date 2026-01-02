@@ -11,10 +11,13 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 import type {
+  AuditLog,
   ConfirmDataEntryResponse,
   CreateDataEntryRequest,
   CreateDataEntryResponse,
   DataEntry,
+  ListAuditLogsParams,
+  ListAuditLogsResponse,
   ListDataEntriesParams,
   ListDataEntriesResponse,
   RejectDataEntryRequest,
@@ -313,14 +316,27 @@ export const auditorApi = {
   },
 
   /**
+   * Get a specific data entry.
+   * GET /auditor/data/{entry_id}
+   */
+  getDataEntry: async (entryId: string): Promise<DataEntry> => {
+    const response = await apiClient.get<DataEntry>(
+      `/auditor/data/${entryId}`
+    );
+    return response.data;
+  },
+
+  /**
    * Get audit logs.
    * GET /auditor/audit
    */
-  getAuditLogs: async (params?: {
-    limit?: number;
-    offset?: number;
-  }): Promise<unknown> => {
-    const response = await apiClient.get("/auditor/audit", { params });
+  getAuditLogs: async (
+    params?: ListAuditLogsParams
+  ): Promise<ListAuditLogsResponse> => {
+    const response = await apiClient.get<ListAuditLogsResponse>(
+      "/auditor/audit",
+      { params }
+    );
     return response.data;
   },
 };

@@ -144,3 +144,42 @@ export interface ListDataEntriesParams {
   limit?: number;
   offset?: number;
 }
+
+/**
+ * Audit log entry from the API.
+ * Matches the backend AuditLog model.
+ */
+export interface AuditLog {
+  audit_id: string;
+  actor_id: string;
+  actor_role: string;
+  actor_username: string;
+  action: string;
+  resource_type: string;
+  resource_id: string | null;
+  scope_granted: string | null;
+  request_id: string | null;
+  request_path: string;
+  request_method: string;
+  success: boolean;
+  error_message: string | null;
+  status_code: number | null;
+  timestamp: string;
+}
+
+/**
+ * List audit logs response.
+ */
+export interface ListAuditLogsResponse {
+  items: AuditLog[];
+  total: number;
+}
+
+/**
+ * Query parameters for listing audit logs.
+ */
+export interface ListAuditLogsParams {
+  limit?: number;
+  offset?: number;
+  actor_id?: string;
+}
