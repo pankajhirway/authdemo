@@ -57,3 +57,33 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  /* Progress bar animation for LoadingSpinner bar variant */
+  @keyframes progress {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-progress {
+    animation: progress 1.5s ease-in-out infinite;
+  }
+
+  /* Shrink animation for Toast progress bar */
+  @keyframes shrink {
+    from {
+      width: 100%;
+    }
+    to {
+      width: 0%;
+    }
+  }
+
+  .animate-shrink {
+    animation: shrink linear forwards;
+  }
+}
