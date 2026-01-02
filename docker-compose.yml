@@ -73,6 +73,34 @@ services:
       timeout: 10s
       retries: 3
 
+  # Frontend (React/Vite)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: authz-authn-frontend
+    environment:
+      VITE_API_BASE_URL: http://backend:8000/api/v1
+      VITE_KEYCLOAK_URL: http://keycloak:8080
+      VITE_KEYCLOAK_ISSUER: http://localhost:8080/realms/authz-authn-demo
+      VITE_KEYCLOAK_REALM: authz-authn-demo
+      VITE_KEYCLOAK_CLIENT_ID: demo-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    volumes:
+      - ./frontend:/app/frontend:rw
+      - /app/frontend/node_modules
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   # Prometheus (Metrics)
   prometheus:
     image: prom/prometheus:latest
