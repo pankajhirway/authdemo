@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuthzAuthn Demo - Testing UI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .role-switcher {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .role-btn {
+            padding: 10px 20px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .role-btn:hover {
+            border-color: #667eea;
+        }
+
+        .role-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .role-badge {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .role-operator .role-badge { background: #3b82f6; }
+        .role-supervisor .role-badge { background: #10b981; }
+        .role-auditor .role-badge { background: #f59e0b; }
+        .role-admin .role-badge { background: #ef4444; }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel h2 {
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .data-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .data-item {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .data-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .data-item-id {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-draft { background: #dbeafe; color: #1e40af; }
+        .status-submitted { background: #fef3c7; color: #92400e; }
+        .status-confirmed { background: #d1fae5; color: #065f46; }
+        .status-rejected { background: #fee2e2; color: #991b1b; }
+        .status-corrected { background: #e0e7ff; color: #3730a3; }
+
+        .data-item-body {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .data-item-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .event-timeline {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .event-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .event-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #667eea;
+        }
+
+        .event-item::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 17px;
+            width: 2px;
+            height: calc(100% - 12px);
+            background: #e5e7eb;
+        }
+
+        .event-item:last-child::after {
+            display: none;
+        }
+
+        .event-type {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+
+        .event-meta {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .event-details {
+            margin-top: 8px;
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .filtered-info {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #92400e;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .response-box {
+            background: #1f2937;
+            color: #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Role Switcher -->
+        <div class="header">
+            <h1>🔐 AuthzAuthn Demo - Testing UI</h1>
+            <p>Interactive testing interface for authorization/authentication workflows</p>
+
+            <div class="role-switcher">
+                <button class="role-btn role-operator active" data-role="operator" onclick="switchRole('operator')">
+                    <span class="role-badge"></span>
+                    Operator
+                </button>
+                <button class="role-btn role-supervisor" data-role="supervisor" onclick="switchRole('supervisor')">
+                    <span class="role-badge"></span>
+                    Supervisor
+                </button>
+                <button class="role-btn role-auditor" data-role="auditor" onclick="switchRole('auditor')">
+                    <span class="role-badge"></span>
+                    Auditor
+                </button>
+                <button class="role-btn role-admin" data-role="admin" onclick="switchRole('admin')">
+                    <span class="role-badge"></span>
+                    Admin
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Panel -->
+            <div class="panel" id="left-panel">
+                <h2 id="panel-title">Operator Workspace</h2>
+
+                <!-- Operator Panel -->
+                <div id="operator-panel">
+                    <div class="filtered-info">
+                        ℹ️ As an Operator, you can only see your own entries and create/modify unconfirmed entries.
+                    </div>
+
+                    <div class="form-group">
+                        <label for="entry-title">Entry Title</label>
+                        <input type="text" id="entry-title" placeholder="Enter entry title">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="entry-data">Data (JSON)</label>
+                        <textarea id="entry-data" placeholder='{"key": "value"}'>{"name": "Test Entry", "value": "Sample data"}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="entry-type">Entry Type</label>
+                        <select id="entry-type">
+                            <option value="customer_data">Customer Data</option>
+                            <option value="transaction">Transaction</option>
+                            <option value="inventory">Inventory</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="createEntry()">Create Entry</button>
+                        <button class="btn btn-secondary" onclick="loadMyEntries()">Refresh</button>
+                    </div>
+
+                    <h3 style="margin-top: 20px; margin-bottom: 10px;">My Entries</h3>
+                    <div class="data-list" id="my-entries-list">
+                        <p style="color: #999;">No entries yet. Create one above!</p>
+                    </div>
+                </div>
+
+                <!-- Supervisor Panel -->
+                <div id="supervisor-panel" class="hidden">
+                    <div class="filtered-info">
+                        ℹ️ As a Supervisor, you can see all entries and confirm/reject/correct them.
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="pending-count">0</div>
+                            <div class="stat-label">Pending Review</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="confirmed-count">0</div>
+                            <div class="stat-label">Confirmed Today</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="filter-status">Filter by Status</label>
+                        <select id="filter-status" onchange="loadAllEntries()">
+                            <option value="all">All Entries</option>
+                            <option value="submitted">Pending Review</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="corrected">Corrected</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-secondary" onclick="loadAllEntries()" style="width: 100%; margin-bottom: 15px;">Load All Entries</button>
+
+                    <h3>All Entries</h3>
+                    <div class="data-list" id="all-entries-list">
+                        <p style="color: #999;">Click "Load All Entries" to view.</p>
+                    </div>
+                </div>
+
+                <!-- Auditor Panel -->
+                <div id="auditor-panel" class="hidden">
+                    <div class="filtered-info">
+                        ℹ️ As an Auditor, you have read-only access to all data and complete audit trails.
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-events">0</div>
+                            <div class="stat-label">Total Events</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-audit">0</div>
+                            <div class="stat-label">Audit Logs</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="audit-search">Search Audit Trail</label>
+                        <input type="text" id="audit-search" placeholder="Search by username, action, or resource...">
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="loadAuditTrail()">Load Audit Trail</button>
+                        <button class="btn btn-success" onclick="exportAuditLog()">Export Log</button>
+                    </div>
+
+                    <h3 style="margin-top: 20px;">All Entries (Read-Only)</h3>
+                    <div class="data-list" id="auditor-entries-list">
+                        <p style="color: #999;">Load audit trail to view.</p>
+                    </div>
+                </div>
+
+                <!-- Admin Panel -->
+                <div id="admin-panel" class="hidden">
+                    <div class="filtered-info">
+                        ℹ️ As an Admin, you have full system access including health metrics and configuration.
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="system-health">✓</div>
+                            <div class="stat-label">System Health</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="db-status">✓</div>
+                            <div class="stat-label">Database</div>
+                        </div>
+                    </div>
+
+                    <h3>System Actions</h3>
+                    <div class="btn-group" style="flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="getHealthMetrics()">Health Check</button>
+                        <button class="btn btn-success" onclick="getSystemMetrics()">Metrics</button>
+                        <button class="btn btn-warning" onclick="loadSystemEvents()">System Events</button>
+                    </div>
+
+                    <h3 style="margin-top: 20px;">System Information</h3>
+                    <div class="response-box" id="system-info">{
+  "status": "healthy",
+  "version": "0.1.0",
+  "environment": "development"
+}</div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="panel" id="right-panel">
+                <h2>Event History & Actions</h2>
+
+                <div id="action-area">
+                    <div class="form-group" id="action-note-group">
+                        <label for="action-note">Note (Optional)</label>
+                        <textarea id="action-note" placeholder="Add a note for this action..."></textarea>
+                    </div>
+
+                    <div class="form-group" id="correction-data-group" class="hidden">
+                        <label for="correction-data">Corrected Data (JSON)</label>
+                        <textarea id="correction-data" placeholder='{"key": "corrected_value"}'>{"name": "Corrected Entry", "value": "Updated data"}</textarea>
+                    </div>
+
+                    <div id="action-buttons"></div>
+                </div>
+
+                <h3 style="margin-top: 20px;">Event Timeline</h3>
+                <div class="event-timeline" id="event-timeline">
+                    <p style="color: #999;">Select an entry to view its event history.</p>
+                </div>
+
+                <h3 style="margin-top: 20px;">API Response</h3>
+                <div class="response-box" id="api-response">// API responses will appear here</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE = 'http://localhost:8000';
+        let currentRole = 'operator';
+        let currentEntryId = null;
+        let mockData = {
+            entries: [],
+            events: [],
+            auditLogs: []
+        };
+
+        // Initialize mock data
+        function initMockData() {
+            // Create some sample entries
+            mockData.entries = [
+                {
+                    entry_id: generateUUID(),
+                    data: {"name": "Customer Order #1", "amount": 1500, "customer": "ACME Corp"},
+                    status: "submitted",
+                    created_by: "operator1",
+                    created_at: new Date(Date.now() - 3600000).toISOString(),
+                    created_by_username: "operator1"
+                },
+                {
+                    entry_id: generateUUID(),
+                    data: {"name": "Inventory Update", "sku": "SKU-001", "quantity": 100},
+                    status: "confirmed",
+                    created_by: "operator1",
+                    created_at: new Date(Date.now() - 7200000).toISOString(),
+                    created_by_username: "operator1",
+                    confirmed_by_username: "supervisor1",
+                    confirmed_at: new Date(Date.now() - 3600000).toISOString()
+                },
+                {
+                    entry_id: generateUUID(),
+                    data: {"name": "Transaction Record", "type": "payment", "amount": 500},
+                    status: "rejected",
+                    created_by: "operator2",
+                    created_at: new Date(Date.now() - 10800000).toISOString(),
+                    created_by_username: "operator2",
+                    rejected_by_username: "supervisor1",
+                    rejected_at: new Date(Date.now() - 7200000).toISOString(),
+                    rejected_reason: "Invalid amount format"
+                }
+            ];
+
+            // Create sample events
+            mockData.entries.forEach(entry => {
+                mockData.events.push({
+                    event_id: generateUUID(),
+                    entity_id: entry.entry_id,
+                    event_type: 'data.created',
+                    actor_username: entry.created_by_username,
+                    timestamp: entry.created_at,
+                    payload: { data: entry.data }
+                });
+
+                if (entry.status === 'confirmed' && entry.confirmed_at) {
+                    mockData.events.push({
+                        event_id: generateUUID(),
+                        entity_id: entry.entry_id,
+                        event_type: 'data.confirmed',
+                        actor_username: entry.confirmed_by_username,
+                        timestamp: entry.confirmed_at,
+                        payload: { confirmation_note: "Approved" }
+                    });
+                }
+
+                if (entry.status === 'rejected' && entry.rejected_at) {
+                    mockData.events.push({
+                        event_id: generateUUID(),
+                        entity_id: entry.entry_id,
+                        event_type: 'data.rejected',
+                        actor_username: entry.rejected_by_username,
+                        timestamp: entry.rejected_at,
+                        payload: { rejection_reason: entry.rejected_reason }
+                    });
+                }
+            });
+
+            // Create sample audit logs
+            mockData.auditLogs = [
+                {
+                    audit_id: generateUUID(),
+                    actor_username: "operator1",
+                    action: "data.create",
+                    resource_type: "data_entry",
+                    success: true,
+                    timestamp: new Date().toISOString()
+                },
+                {
+                    audit_id: generateUUID(),
+                    actor_username: "supervisor1",
+                    action: "data.confirm",
+                    resource_type: "data_entry",
+                    success: true,
+                    timestamp: new Date(Date.now() - 3600000).toISOString()
+                }
+            ];
+        }
+
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // Role switching
+        function switchRole(role) {
+            currentRole = role;
+            currentEntryId = null;
+
+            // Update role buttons
+            document.querySelectorAll('.role-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-role="${role}"]`).classList.add('active');
+
+            // Hide all panels
+            document.getElementById('operator-panel').classList.add('hidden');
+            document.getElementById('supervisor-panel').classList.add('hidden');
+            document.getElementById('auditor-panel').classList.add('hidden');
+            document.getElementById('admin-panel').classList.add('hidden');
+
+            // Show selected panel
+            document.getElementById(`${role}-panel`).classList.remove('hidden');
+
+            // Update title
+            const titles = {
+                operator: 'Operator Workspace',
+                supervisor: 'Supervisor Workspace',
+                auditor: 'Auditor Workspace',
+                admin: 'Admin Dashboard'
+            };
+            document.getElementById('panel-title').textContent = titles[role];
+
+            // Clear action area
+            clearActionArea();
+
+            // Load initial data
+            if (role === 'operator') {
+                loadMyEntries();
+            } else if (role === 'supervisor') {
+                loadAllEntries();
+                updateStats();
+            } else if (role === 'auditor') {
+                loadAuditTrail();
+            } else if (role === 'admin') {
+                getHealthMetrics();
+            }
+
+            logResponse(`Switched to ${role.toUpperCase()} role`);
+        }
+
+        // Clear action area
+        function clearActionArea() {
+            document.getElementById('action-note-group').classList.add('hidden');
+            document.getElementById('correction-data-group').classList.add('hidden');
+            document.getElementById('action-buttons').innerHTML = '';
+            document.getElementById('event-timeline').innerHTML = '<p style="color: #999;">Select an entry to view its event history.</p>';
+            currentEntryId = null;
+        }
+
+        // Operator functions
+        function createEntry() {
+            const title = document.getElementById('entry-title').value || 'Untitled Entry';
+            const dataStr = document.getElementById('entry-data').value;
+            const entryType = document.getElementById('entry-type').value;
+
+            let data;
+            try {
+                data = JSON.parse(dataStr);
+            } catch (e) {
+                logResponse('Error: Invalid JSON in data field', 'error');
+                return;
+            }
+
+            const newEntry = {
+                entry_id: generateUUID(),
+                data: { ...data, title },
+                entry_type: entryType,
+                status: 'draft',
+                created_by: 'operator1',
+                created_at: new Date().toISOString(),
+                created_by_username: 'operator1'
+            };
+
+            mockData.entries.push(newEntry);
+            mockData.events.push({
+                event_id: generateUUID(),
+                entity_id: newEntry.entry_id,
+                event_type: 'data.created',
+                actor_username: 'operator1',
+                timestamp: newEntry.created_at,
+                payload: { data: newEntry.data, entry_type }
+            });
+
+            mockData.auditLogs.push({
+                audit_id: generateUUID(),
+                actor_username: 'operator1',
+                action: 'data.create',
+                resource_type: 'data_entry',
+                resource_id: newEntry.entry_id,
+                success: true,
+                timestamp: new Date().toISOString()
+            });
+
+            logResponse(`Created entry: ${newEntry.entry_id}`, 'success');
+            loadMyEntries();
+
+            // Clear form
+            document.getElementById('entry-title').value = '';
+        }
+
+        function loadMyEntries() {
+            const container = document.getElementById('my-entries-list');
+            const myEntries = mockData.entries.filter(e => e.created_by_username === 'operator1');
+
+            if (myEntries.length === 0) {
+                container.innerHTML = '<p style="color: #999;">No entries yet. Create one above!</p>';
+                return;
+            }
+
+            container.innerHTML = myEntries.map(entry => `
+                <div class="data-item" onclick="selectEntry('${entry.entry_id}')">
+                    <div class="data-item-header">
+                        <span class="data-item-id">${entry.data?.title || entry.data?.name || 'Untitled'}</span>
+                        <span class="status-badge status-${entry.status}">${entry.status}</span>
+                    </div>
+                    <div class="data-item-body">
+                        <div>Type: ${entry.entry_type || 'N/A'}</div>
+                        <div>Created: ${new Date(entry.created_at).toLocaleString()}</div>
+                    </div>
+                    <div class="data-item-actions">
+                        ${entry.status === 'draft' ? `<button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); submitEntry('${entry.entry_id}')">Submit</button>` : ''}
+                        ${entry.status === 'draft' ? `<button class="btn btn-warning btn-sm" onclick="event.stopPropagation(); updateEntry('${entry.entry_id}')">Update</button>` : ''}
+                        <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); viewEvents('${entry.entry_id}')">History</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function submitEntry(entryId) {
+            const entry = mockData.entries.find(e => e.entry_id === entryId);
+            if (entry) {
+                entry.status = 'submitted';
+                entry.submitted_at = new Date().toISOString();
+
+                mockData.events.push({
+                    event_id: generateUUID(),
+                    entity_id: entryId,
+                    event_type: 'data.submitted',
+                    actor_username: 'operator1',
+                    timestamp: entry.submitted_at,
+                    payload: { submitted_by: 'operator1' }
+                });
+
+                logResponse(`Submitted entry: ${entryId}`, 'success');
+                loadMyEntries();
+            }
+        }
+
+        function updateEntry(entryId) {
+            const entry = mockData.entries.find(e => e.entry_id === entryId);
+            if (entry && entry.status === 'draft') {
+                // For demo, just show the update dialog
+                const newDataStr = prompt('Enter new data (JSON):', JSON.stringify(entry.data));
+                if (newDataStr) {
+                    try {
+                        const newData = JSON.parse(newDataStr);
+                        entry.data = newData;
+                        entry.updated_at = new Date().toISOString();
+
+                        mockData.events.push({
+                            event_id: generateUUID(),
+                            entity_id: entryId,
+                            event_type: 'data.updated',
+                            actor_username: 'operator1',
+                            timestamp: entry.updated_at,
+                            payload: { previous_data: entry.data, new_data: newData }
+                        });
+
+                        logResponse(`Updated entry: ${entryId}`, 'success');
+                        loadMyEntries();
+                    } catch (e) {
+                        logResponse('Error: Invalid JSON', 'error');
+                    }
+                }
+            }
+        }
+
+        // Supervisor functions
+        function loadAllEntries() {
+            const container = document.getElementById('all-entries-list');
+            const filter = document.getElementById('filter-status').value;
+
+            let entries = mockData.entries;
+            if (filter !== 'all') {
+                entries = entries.filter(e => e.status === filter);
+            }
+
+            if (entries.length === 0) {
+                container.innerHTML = '<p style="color: #999;">No entries found.</p>';
+                return;
+            }
+
+            container.innerHTML = entries.map(entry => `
+                <div class="data-item" onclick="selectEntry('${entry.entry_id}')">
+                    <div class="data-item-header">
+                        <span class="data-item-id">${entry.data?.title || entry.data?.name || 'Untitled'} (${entry.created_by_username})</span>
+                        <span class="status-badge status-${entry.status}">${entry.status}</span>
+                    </div>
+                    <div class="data-item-body">
+                        <div>${JSON.stringify(entry.data, null, 2)}</div>
+                        <div>Created: ${new Date(entry.created_at).toLocaleString()}</div>
+                        ${entry.confirmed_at ? `<div>Confirmed by: ${entry.confirmed_by_username} at ${new Date(entry.confirmed_at).toLocaleString()}</div>` : ''}
+                        ${entry.rejected_at ? `<div>Rejected by: ${entry.rejected_by_username} at ${new Date(entry.rejected_at).toLocaleString()}</div>` : ''}
+                    </div>
+                    <div class="data-item-actions">
+                        ${entry.status === 'submitted' ? `
+                            <button class="btn btn-success btn-sm" onclick="event.stopPropagation(); confirmEntry('${entry.entry_id}')">Confirm</button>
+                            <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); rejectEntry('${entry.entry_id}')">Reject</button>
+                        ` : ''}
+                        ${entry.status === 'confirmed' || entry.status === 'rejected' ? `
+                            <button class="btn btn-warning btn-sm" onclick="event.stopPropagation(); showCorrectionForm('${entry.entry_id}')">Correct</button>
+                        ` : ''}
+                        <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); viewEvents('${entry.entry_id}')">History</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function confirmEntry(entryId) {
+            const note = document.getElementById('action-note').value;
+            const entry = mockData.entries.find(e => e.entry_id === entryId);
+
+            if (entry) {
+                entry.status = 'confirmed';
+                entry.confirmed_by_username = 'supervisor1';
+                entry.confirmed_at = new Date().toISOString();
+
+                mockData.events.push({
+                    event_id: generateUUID(),
+                    entity_id: entryId,
+                    event_type: 'data.confirmed',
+                    actor_username: 'supervisor1',
+                    timestamp: entry.confirmed_at,
+                    payload: { confirmation_note: note || 'Approved' }
+                });
+
+                logResponse(`Confirmed entry: ${entryId}`, 'success');
+                loadAllEntries();
+                updateStats();
+                clearActionArea();
+            }
+        }
+
+        function rejectEntry(entryId) {
+            const reason = document.getElementById('action-note').value || 'No reason provided';
+            const entry = mockData.entries.find(e => e.entry_id === entryId);
+
+            if (entry) {
+                entry.status = 'rejected';
+                entry.rejected_by_username = 'supervisor1';
+                entry.rejected_at = new Date().toISOString();
+                entry.rejected_reason = reason;
+
+                mockData.events.push({
+                    event_id: generateUUID(),
+                    entity_id: entryId,
+                    event_type: 'data.rejected',
+                    actor_username: 'supervisor1',
+                    timestamp: entry.rejected_at,
+                    payload: { rejection_reason: reason }
+                });
+
+                logResponse(`Rejected entry: ${entryId}`, 'warning');
+                loadAllEntries();
+                updateStats();
+                clearActionArea();
+            }
+        }
+
+        function showCorrectionForm(entryId) {
+            document.getElementById('action-note-group').classList.remove('hidden');
+            document.getElementById('correction-data-group').classList.remove('hidden');
+            document.getElementById('action-buttons').innerHTML = `
+                <button class="btn btn-warning" onclick="correctEntry('${entryId}')">Submit Correction</button>
+                <button class="btn btn-secondary" onclick="clearActionArea()">Cancel</button>
+            `;
+
+            const entry = mockData.entries.find(e => e.entry_id === entryId);
+            if (entry) {
+                document.getElementById('correction-data').value = JSON.stringify(entry.data, null, 2);
+            }
+        }
+
+        function correctEntry(entryId) {
+            const note = document.getElementById('action-note').value || 'Correction made';
+            const newDataStr = document.getElementById('correction-data').value;
+            const entry = mockData.entries.find(e => e.entry_id === entryId);
+
+            if (entry) {
+                let newData;
+                try {
+                    newData = JSON.parse(newDataStr);
+                } catch (e) {
+                    logResponse('Error: Invalid JSON in correction data', 'error');
+                    return;
+                }
+
+                const previousData = { ...entry.data };
+                entry.data = newData;
+                entry.status = 'corrected';
+                entry.last_corrected_at = new Date().toISOString();
+                entry.last_corrected_by_username = 'supervisor1';
+                entry.correction_count = (entry.correction_count || 0) + 1;
+
+                mockData.events.push({
+                    event_id: generateUUID(),
+                    entity_id: entryId,
+                    event_type: 'data.corrected',
+                    actor_username: 'supervisor1',
+                    timestamp: entry.last_corrected_at,
+                    payload: {
+                        previous_data: previousData,
+                        corrected_data: newData,
+                        fields_corrected: Object.keys(newData),
+                        correction_note: note
+                    }
+                });
+
+                logResponse(`Corrected entry: ${entryId}`, 'success');
+                loadAllEntries();
+                clearActionArea();
+            }
+        }
+
+        function updateStats() {
+            const pending = mockData.entries.filter(e => e.status === 'submitted').length;
+            const confirmedToday = mockData.entries.filter(e => {
+                return e.status === 'confirmed' && e.confirmed_at &&
+                    new Date(e.confirmed_at).toDateString() === new Date().toDateString();
+            }).length;
+
+            document.getElementById('pending-count').textContent = pending;
+            document.getElementById('confirmed-count').textContent = confirmedToday;
+        }
+
+        // Auditor functions
+        function loadAuditTrail() {
+            // Update stats
+            document.getElementById('total-events').textContent = mockData.events.length;
+            document.getElementById('total-audit').textContent = mockData.auditLogs.length;
+
+            // Show all entries
+            const container = document.getElementById('auditor-entries-list');
+            container.innerHTML = mockData.entries.map(entry => `
+                <div class="data-item" onclick="selectEntry('${entry.entry_id}')">
+                    <div class="data-item-header">
+                        <span class="data-item-id">${entry.data?.title || entry.data?.name || 'Untitled'}</span>
+                        <span class="status-badge status-${entry.status}">${entry.status}</span>
+                    </div>
+                    <div class="data-item-body">
+                        <div>Created by: ${entry.created_by_username}</div>
+                        <div>Status: ${entry.status}</div>
+                        <div>Created: ${new Date(entry.created_at).toLocaleString()}</div>
+                        ${entry.confirmed_by_username ? `<div>Confirmed by: ${entry.confirmed_by_username}</div>` : ''}
+                        ${entry.rejected_by_username ? `<div>Rejected by: ${entry.rejected_by_username}</div>` : ''}
+                    </div>
+                    <div class="data-item-actions">
+                        <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); viewEvents('${entry.entry_id}')">Full History</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function exportAuditLog() {
+            const logData = JSON.stringify(mockData.auditLogs, null, 2);
+            const blob = new Blob([logData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `audit_log_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            logResponse('Exported audit log', 'success');
+        }
+
+        // Admin functions
+        function getHealthMetrics() {
+            const health = {
+                status: 'healthy',
+                service: 'authz-authn-demo',
+                environment: 'development',
+                version: '0.1.0',
+                uptime: process.uptime ? Math.floor(process.uptime()) : 'N/A',
+                database: 'connected',
+                timestamp: new Date().toISOString()
+            };
+
+            document.getElementById('system-info').textContent = JSON.stringify(health, null, 2);
+            document.getElementById('system-health').textContent = '✓';
+            document.getElementById('db-status').textContent = '✓';
+            logResponse('Health check: System healthy', 'success');
+        }
+
+        function getSystemMetrics() {
+            const metrics = {
+                total_entries: mockData.entries.length,
+                total_events: mockData.events.length,
+                total_audit_logs: mockData.auditLogs.length,
+                status_breakdown: {
+                    draft: mockData.entries.filter(e => e.status === 'draft').length,
+                    submitted: mockData.entries.filter(e => e.status === 'submitted').length,
+                    confirmed: mockData.entries.filter(e => e.status === 'confirmed').length,
+                    rejected: mockData.entries.filter(e => e.status === 'rejected').length,
+                    corrected: mockData.entries.filter(e => e.status === 'corrected').length
+                }
+            };
+
+            document.getElementById('system-info').textContent = JSON.stringify(metrics, null, 2);
+            logResponse('Loaded system metrics', 'success');
+        }
+
+        function loadSystemEvents() {
+            const container = document.getElementById('event-timeline');
+            container.innerHTML = mockData.events.slice(-20).reverse().map(event => `
+                <div class="event-item">
+                    <div class="event-type">${event.event_type}</div>
+                    <div class="event-meta">
+                        ${event.actor_username} • ${new Date(event.timestamp).toLocaleString()}
+                    </div>
+                    <div class="event-details">
+                        ${JSON.stringify(event.payload, null, 2)}
+                    </div>
+                </div>
+            `).join('');
+
+            logResponse('Loaded system events', 'success');
+        }
+
+        // Common functions
+        function selectEntry(entryId) {
+            currentEntryId = entryId;
+            const entry = mockData.entries.find(e => e.entry_id === entryId);
+
+            if (!entry) return;
+
+            // Show action buttons based on role and status
+            const actionButtons = document.getElementById('action-buttons');
+            document.getElementById('action-note-group').classList.remove('hidden');
+            document.getElementById('correction-data-group').classList.add('hidden');
+
+            if (currentRole === 'operator' && entry.status === 'draft') {
+                actionButtons.innerHTML = `
+                    <button class="btn btn-primary" onclick="submitEntry('${entryId}')">Submit</button>
+                    <button class="btn btn-warning" onclick="updateEntry('${entryId}')">Update</button>
+                `;
+            } else if (currentRole === 'supervisor' && entry.status === 'submitted') {
+                actionButtons.innerHTML = `
+                    <button class="btn btn-success" onclick="confirmEntry('${entryId}')">Confirm</button>
+                    <button class="btn btn-danger" onclick="rejectEntry('${entryId}')">Reject</button>
+                `;
+            } else if (currentRole === 'supervisor' && (entry.status === 'confirmed' || entry.status === 'rejected')) {
+                actionButtons.innerHTML = `
+                    <button class="btn btn-warning" onclick="showCorrectionForm('${entryId}')">Correct</button>
+                `;
+            } else {
+                document.getElementById('action-note-group').classList.add('hidden');
+            }
+
+            viewEvents(entryId);
+        }
+
+        function viewEvents(entryId) {
+            const container = document.getElementById('event-timeline');
+            const events = mockData.events.filter(e => e.entity_id === entryId);
+
+            if (events.length === 0) {
+                container.innerHTML = '<p style="color: #999;">No events found for this entry.</p>';
+                return;
+            }
+
+            container.innerHTML = events.map(event => `
+                <div class="event-item">
+                    <div class="event-type">${event.event_type}</div>
+                    <div class="event-meta">
+                        ${event.actor_username} • ${new Date(event.timestamp).toLocaleString()}
+                    </div>
+                    <div class="event-details">
+                        ${JSON.stringify(event.payload, null, 2)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function logResponse(message, type = 'info') {
+            const responseBox = document.getElementById('api-response');
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = {
+                'success': '✓',
+                'error': '✗',
+                'warning': '⚠',
+                'info': 'ℹ'
+            }[type] || '→';
+
+            responseBox.textContent = `[${timestamp}] ${prefix} ${message}\n` + responseBox.textContent;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initMockData();
+            loadMyEntries();
+            logResponse('UI initialized - ready for testing', 'success');
+        });
+    </script>
+</body>
+</html>

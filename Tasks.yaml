@@ -1,0 +1,184 @@
+version: "1.0"
+system: backend_event_driven_compliance_platform
+
+global_constraints:
+  backend_only_enforcement: true
+  frontend_trust_level: none
+  default_deny_security: true
+  immutable_history: true
+  audit_required: true
+
+artifacts_root: "/artifacts"
+
+tasks:
+
+  - id: auth_identity_setup
+    name: Identity & Authentication Setup
+    type: infrastructure
+    owner: ai_agent
+    dependencies: []
+    inputs:
+      - roles_definition.yaml
+      - scopes_definition.yaml
+    outputs:
+      - keycloak_realm_config.json
+      - oauth_clients.json
+    validation:
+      - jwt_issued_successfully
+      - roles_present_in_token
+    failure_policy: halt_pipeline
+
+  - id: authz_policy_engine
+    name: Authorization Policy Engine
+    type: backend_core
+    owner: ai_agent
+    dependencies:
+      - auth_identity_setup
+    inputs:
+      - role_scope_matrix.yaml
+    outputs:
+      - policy_engine_module.py
+      - policy_tests.py
+    validation:
+      - default_deny_verified
+      - unauthorized_access_blocked
+    failure_policy: halt_pipeline
+
+  - id: event_store_schema
+    name: Event Store Schema Design
+    type: data_model
+    owner: ai_agent
+    dependencies: []
+    inputs: []
+    outputs:
+      - event_store_schema.sql
+    validation:
+      - no_update_delete_constraints
+      - append_only_verified
+    failure_policy: halt_pipeline
+
+  - id: event_write_service
+    name: Event Write Service
+    type: backend_core
+    owner: ai_agent
+    dependencies:
+      - event_store_schema
+      - authz_policy_engine
+    inputs:
+      - event_definitions.yaml
+    outputs:
+      - event_writer.py
+      - event_validation.py
+    validation:
+      - event_persistence_verified
+      - immutability_enforced
+    failure_policy: halt_pipeline
+
+  - id: domain_workflows
+    name: Domain Event Workflows
+    type: business_logic
+    owner: ai_agent
+    dependencies:
+      - event_write_service
+    inputs:
+      - workflow_rules.yaml
+    outputs:
+      - workflow_handlers.py
+    validation:
+      - corrections_create_new_events
+      - no_state_mutation
+    failure_policy: halt_pipeline
+
+  - id: projections_engine
+    name: Read Model Projections
+    type: data_projection
+    owner: ai_agent
+    dependencies:
+      - event_store_schema
+      - domain_workflows
+    inputs:
+      - projection_definitions.yaml
+    outputs:
+      - projection_builder.py
+      - rebuild_script.py
+    validation:
+      - rebuild_from_zero_verified
+      - idempotency_verified
+    failure_policy: halt_pipeline
+
+  - id: api_layer
+    name: Role-Namespace API Layer
+    type: interface
+    owner: ai_agent
+    dependencies:
+      - authz_policy_engine
+      - projections_engine
+    inputs:
+      - api_contracts.yaml
+    outputs:
+      - fastapi_routes/
+    validation:
+      - role_isolation_verified
+      - field_level_filtering_verified
+    failure_policy: halt_pipeline
+
+  - id: audit_logging
+    name: Audit Logging System
+    type: compliance
+    owner: ai_agent
+    dependencies:
+      - api_layer
+    inputs:
+      - audit_fields.yaml
+    outputs:
+      - audit_logger.py
+      - log_schema.json
+    validation:
+      - actor_attribution_verified
+      - timestamp_integrity_verified
+    failure_policy: halt_pipeline
+
+  - id: security_hardening
+    name: Security Hardening
+    type: security
+    owner: ai_agent
+    dependencies:
+      - api_layer
+      - audit_logging
+    inputs: []
+    outputs:
+      - rate_limiting.py
+      - error_sanitization.py
+    validation:
+      - sensitive_data_never_returned
+      - error_leakage_prevented
+    failure_policy: halt_pipeline
+
+  - id: minimal_frontend
+    name: Minimal Role-Based Frontend
+    type: ui
+    owner: ai_agent
+    dependencies:
+      - api_layer
+    inputs:
+      - role_ui_map.yaml
+    outputs:
+      - frontend_apps/
+    validation:
+      - no_business_logic_present
+    failure_policy: warn_only
+
+  - id: observability_deployment
+    name: Deployment & Observability
+    type: operations
+    owner: ai_agent
+    dependencies:
+      - security_hardening
+    inputs: []
+    outputs:
+      - dockerfiles/
+      - monitoring_config.yaml
+    validation:
+      - structured_logs_verified
+      - metrics_exposed
+    failure_policy: halt_pipeline

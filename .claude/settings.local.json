@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(.venvScriptspip install -e .)",
+      "Bash(docker:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(curl:*)",
+      "Bash(# Get fresh operator token:*)",
+      "Bash(.venv/Scripts/python:*)",
+      "Bash(cat:*)",
+      "Bash(pip install:*)",
+      "Bash(docker-compose up:*)",
+      "Bash(set:*)",
+      "Bash(alembic upgrade head:*)",
+      "Bash(docker-compose down:*)",
+      "Bash(psql:*)"
+    ]
+  }
+}
