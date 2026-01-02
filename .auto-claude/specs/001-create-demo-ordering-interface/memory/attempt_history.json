@@ -299,11 +299,35 @@
         }
       ],
       "status": "completed"
+    },
+    "subtask-8-2": {
+      "attempts": [
+        {
+          "session": 26,
+          "timestamp": "2026-01-02T19:34:15.255762",
+          "approach": "Implemented: End-to-end verification of supervisor approval flow",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
+    },
+    "subtask-8-3": {
+      "attempts": [
+        {
+          "session": 27,
+          "timestamp": "2026-01-02T19:38:49.176529",
+          "approach": "Implemented: End-to-end verification of auditor read-only access",
+          "success": true,
+          "error": null
+        }
+      ],
+      "status": "completed"
     }
   },
   "stuck_subtasks": [],
   "metadata": {
     "created_at": "2026-01-02T17:11:19.199004",
-    "last_updated": "2026-01-02T19:26:55.998108"
+    "last_updated": "2026-01-02T19:38:49.176534"
   }
 }

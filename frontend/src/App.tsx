@@ -16,6 +16,7 @@ import { OperatorDashboard } from "./pages/operator-dashboard";
 import { SupervisorDashboard } from "./pages/supervisor-dashboard";
 import { AuditorDashboard } from "./pages/auditor-dashboard";
 import { AdminDashboard } from "./pages/admin-dashboard";
+import { AccessDeniedPage } from "./pages/access-denied";
 
 /**
  * Home page component.
@@ -231,6 +232,9 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            {/* Access denied page */}
+            <Route path="/access-denied" element={<AccessDeniedPage />} />
 
             {/* Catch all - redirect to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
