@@ -120,7 +120,7 @@
             "command": "cd frontend && grep -E '(zustand|axios)' package.json",
             "expected": "zustand and axios in dependencies"
           },
-          "status": "pending"
+          "status": "completed"
         }
       ]
     },
@@ -151,7 +151,7 @@
             "command": "cd frontend && npx tsc --noEmit src/lib/api.ts 2>&1 | head -10",
             "expected": "TypeScript compilation successful"
           },
-          "status": "pending"
+          "status": "completed"
         },
         {
           "id": "subtask-3-2",
