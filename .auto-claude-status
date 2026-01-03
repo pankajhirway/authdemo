@@ -1,10 +1,10 @@
 {
   "active": true,
   "spec": "003-add-frontend-to-docker-compose",
-  "state": "building",
+  "state": "complete",
   "subtasks": {
-    "completed": 7,
-    "total": 7,
+    "completed": 8,
+    "total": 8,
     "in_progress": 0,
     "failed": 0
   },
@@ -18,8 +18,8 @@
     "max": 1
   },
   "session": {
-    "number": 9,
-    "started_at": "2026-01-02T22:30:00.000000"
+    "number": 8,
+    "started_at": "2026-01-02T21:56:19.197458"
   },
-  "last_update": "2026-01-02T22:45:00.000000"
+  "last_update": "2026-01-02T22:20:00.582897"
 }
