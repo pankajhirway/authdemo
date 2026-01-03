@@ -241,7 +241,7 @@ function AdminDashboardContent() {
 export default function AdminDashboard() {
   return (
     <ProtectedRoute>
-      <RequireRole allowedRoles={["admin"]}>
+      <RequireRole roles={["admin"]}>
         <AdminDashboardContent />
       </RequireRole>
     </ProtectedRoute>

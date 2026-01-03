@@ -4,6 +4,7 @@
  */
 
 import { create } from "zustand";
+import { useShallow } from "zustand/react/shallow";
 import type { UserInfo, UserRole, AuthStatus } from "../types/auth";
 
 /**
@@ -60,20 +61,20 @@ type AuthStore = AuthStoreState & AuthActions;
  */
 export const useAuthStore = create<AuthStore>((set, get) => ({
   // Initial state
-  status: "loading",
+  status: "unauthenticated",
   user: null,
   token: null,
   isTokenExpired: false,
 
   // Actions
   setUser: (user) =>
-    set((state) => ({
+    set(() => ({
       user,
       status: user ? "authenticated" : "unauthenticated",
     })),
 
   setToken: (token) =>
-    set((state) => ({
+    set(() => ({
       token,
       isTokenExpired: false,
     })),
@@ -212,9 +213,11 @@ export const useHasAnyRole = () => useAuthStore((state) => state.hasAnyRole);
  * Get auth actions (setUser, clearAuth, etc.).
  */
 export const useAuthActions = () =>
-  useAuthStore((state) => ({
-    setUser: state.setUser,
-    setToken: state.setToken,
-    clearAuth: state.clearAuth,
-    setStatus: state.setStatus,
-  }));
+  useAuthStore(
+    useShallow((state) => ({
+      setUser: state.setUser,
+      setToken: state.setToken,
+      clearAuth: state.clearAuth,
+      setStatus: state.setStatus,
+    }))
+  );

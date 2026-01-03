@@ -4,6 +4,7 @@
  */
 
 import { create } from "zustand";
+import { useShallow } from "zustand/react/shallow";
 import { persist } from "zustand/middleware";
 import type { CartItem } from "../types/menu";
 import type {
@@ -115,10 +116,10 @@ export const useCartStore = create<CartStore>()(
           newItems = cart.items.map((cartItem, index) =>
             index === existingIndex
               ? {
-                  ...cartItem,
-                  quantity: cartItem.quantity + quantity,
-                  specialInstructions: specialInstructions ?? cartItem.specialInstructions,
-                }
+                ...cartItem,
+                quantity: cartItem.quantity + quantity,
+                specialInstructions: specialInstructions ?? cartItem.specialInstructions,
+              }
               : cartItem
           );
         } else {
@@ -410,20 +411,22 @@ export const useIsCartEmpty = () => useCartStore((state) => state.cart.items.len
  * Get cart actions (addItem, removeItem, etc.).
  */
 export const useCartActions = () =>
-  useCartStore((state) => ({
-    addItem: state.addItem,
-    removeItem: state.removeItem,
-    updateQuantity: state.updateQuantity,
-    incrementItem: state.incrementItem,
-    decrementItem: state.decrementItem,
-    clearCart: state.clearCart,
-    updateInstructions: state.updateInstructions,
-    hasItem: state.hasItem,
-    getItemQuantity: state.getItemQuantity,
-    getCartSummary: state.getCartSummary,
-    getCartStats: state.getCartStats,
-    restoreCart: state.restoreCart,
-  }));
+  useCartStore(
+    useShallow((state) => ({
+      addItem: state.addItem,
+      removeItem: state.removeItem,
+      updateQuantity: state.updateQuantity,
+      incrementItem: state.incrementItem,
+      decrementItem: state.decrementItem,
+      clearCart: state.clearCart,
+      updateInstructions: state.updateInstructions,
+      hasItem: state.hasItem,
+      getItemQuantity: state.getItemQuantity,
+      getCartSummary: state.getCartSummary,
+      getCartStats: state.getCartStats,
+      restoreCart: state.restoreCart,
+    }))
+  );
 
 /**
  * Get cart summary with tax calculations.
@@ -432,9 +435,9 @@ export const useCartActions = () =>
  * @param taxRate - Tax rate as decimal (default: 0.08)
  */
 export const useCartSummary = (taxRate = 0.08) =>
-  useCartStore((state) => state.getCartSummary(taxRate));
+  useCartStore(useShallow((state) => state.getCartSummary(taxRate)));
 
 /**
  * Get cart statistics.
  */
-export const useCartStats = () => useCartStore((state) => state.getCartStats());
+export const useCartStats = () => useCartStore(useShallow((state) => state.getCartStats()));

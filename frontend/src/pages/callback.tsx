@@ -52,8 +52,10 @@ export function CallbackPage() {
       try {
         const keycloak = getKeycloakService();
 
+        // Ensure Keycloak is initialized and has processed the response
+        await keycloak.init();
+
         // Check if Keycloak has authenticated the user
-        // Keycloak-js handles the OAuth callback and stores the token
         if (keycloak.isAuthenticated()) {
           // Get the token and user info
           const token = await keycloak.getToken();
@@ -79,7 +81,7 @@ export function CallbackPage() {
         } else {
           // Not authenticated, redirect to login
           setStatusMessage("error");
-          setErrorMessage("Authentication failed. Please try again.");
+          setErrorMessage("Authentication failed to complete. Please try again.");
           setTimeout(() => {
             navigate("/login", { replace: true });
           }, 2000);
@@ -100,12 +102,7 @@ export function CallbackPage() {
       }
     };
 
-    // Small delay to ensure Keycloak has processed the callback
-    const timeoutId = setTimeout(() => {
-      processCallback();
-    }, 100);
-
-    return () => clearTimeout(timeoutId);
+    processCallback();
   }, [navigate, setUser, setToken, setStatus, user]);
 
   /**

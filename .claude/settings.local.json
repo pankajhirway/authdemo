@@ -15,7 +15,8 @@
       "Bash(set:*)",
       "Bash(alembic upgrade head:*)",
       "Bash(docker-compose down:*)",
-      "Bash(psql:*)"
+      "Bash(psql:*)",
+      "Bash(docker-compose logs:*)"
     ]
   }
 }

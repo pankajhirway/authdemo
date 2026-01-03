@@ -385,7 +385,7 @@ export const healthApi = {
    */
   check: async (): Promise<{ status: string }> => {
     const response = await axios.get<{ status: string }>(
-      `${API_BASE_URL}/../health`,
+      `/health`,
       { skipAuth: true }
     );
     return response.data;

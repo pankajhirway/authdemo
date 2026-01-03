@@ -4,6 +4,7 @@
  */
 
 import type { UserRole } from "./api";
+export type { UserRole };
 
 /**
  * Authentication states in the application.

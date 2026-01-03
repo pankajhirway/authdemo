@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
 # Stage 2: Development
 FROM node:20-slim
@@ -52,11 +52,11 @@ COPY package*.json ./
 # Copy application code
 COPY . .
 
-# Create non-root user (UID 1000 to match backend pattern)
-RUN useradd -m -u 1000 nodeuser && chown -R nodeuser:node /app
+# Set ownership to existing node user
+RUN chown -R node:node /app
 
-# Switch to non-root user
-USER nodeuser
+# Switch to non-root node user
+USER node
 
 # Expose port
 EXPOSE 3000

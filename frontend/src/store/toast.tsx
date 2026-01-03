@@ -11,6 +11,13 @@
  */
 
 import { create } from "zustand";
+import { useShallow } from "zustand/react/shallow";
+
+// ... (existing code skipped, assuming I can just replace the whole file content or use multiple replace chunks? NO, I should be precise)
+
+// I will just add import and replace useToast implementation.
+// But wait, the file has existing content at top.
+// I will use multi_replace for this.
 
 /**
  * Simple ID generator for toast notifications.
@@ -252,25 +259,16 @@ export const useToastStore = create<ToastStore>((set, get) => ({
  * toast.success("Operation completed!");
  */
 export const useToast = () => {
-  const {
-    addToast,
-    removeToast,
-    dismissToast,
-    clearAll,
-    success,
-    error,
-    warning,
-    info,
-  } = useToastStore();
-
-  return {
-    addToast,
-    removeToast,
-    dismissToast,
-    clearAll,
-    success,
-    error,
-    warning,
-    info,
-  };
+  return useToastStore(
+    useShallow((state) => ({
+      addToast: state.addToast,
+      removeToast: state.removeToast,
+      dismissToast: state.dismissToast,
+      clearAll: state.clearAll,
+      success: state.success,
+      error: state.error,
+      warning: state.warning,
+      info: state.info,
+    }))
+  );
 };

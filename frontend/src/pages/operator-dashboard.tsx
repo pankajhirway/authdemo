@@ -137,7 +137,7 @@ function OperatorDashboardContent() {
 export default function OperatorDashboard() {
   return (
     <ProtectedRoute>
-      <RequireRole allowedRoles={["operator"]}>
+      <RequireRole roles={["operator"]}>
         <OperatorDashboardContent />
       </RequireRole>
     </ProtectedRoute>

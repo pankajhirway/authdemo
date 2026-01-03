@@ -1,21 +1,23 @@
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { MainLayout } from "./components/layout";
 import { ErrorBoundary } from "./components/ui/ErrorBoundary";
 import { ToastProvider } from "./components/ui/Toast";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { RequireRole } from "./components/auth/RequireRole";
+import { initKeycloak } from "./lib/keycloak";
 
 // Pages
 import { MenuPage } from "./pages/menu";
 import { CartPage } from "./pages/cart";
 import { CheckoutPage } from "./pages/checkout";
-import { OrdersPage } from "./pages/orders";
+import OrdersPage from "./pages/orders";
 import { LoginPage } from "./pages/login";
 import { CallbackPage } from "./pages/callback";
-import { OperatorDashboard } from "./pages/operator-dashboard";
-import { SupervisorDashboard } from "./pages/supervisor-dashboard";
-import { AuditorDashboard } from "./pages/auditor-dashboard";
-import { AdminDashboard } from "./pages/admin-dashboard";
+import OperatorDashboard from "./pages/operator-dashboard";
+import SupervisorDashboard from "./pages/supervisor-dashboard";
+import AuditorDashboard from "./pages/auditor-dashboard";
+import AdminDashboard from "./pages/admin-dashboard";
 import { AccessDeniedPage } from "./pages/access-denied";
 
 /**
@@ -122,6 +124,11 @@ function HomePage() {
  * Includes protected routes and role-based access control.
  */
 function App() {
+  // Initialize auth on mount (run once)
+  useEffect(() => {
+    initKeycloak().catch(console.error);
+  }, []);
+
   return (
     <ErrorBoundary>
       <ToastProvider position="top-right">
@@ -181,13 +188,9 @@ function App() {
             <Route
               path="/operator"
               element={
-                <ProtectedRoute>
-                  <RequireRole role="operator">
-                    <MainLayout appName="OrderDemo">
-                      <OperatorDashboard />
-                    </MainLayout>
-                  </RequireRole>
-                </ProtectedRoute>
+                <MainLayout appName="OrderDemo">
+                  <OperatorDashboard />
+                </MainLayout>
               }
             />
 
@@ -195,13 +198,9 @@ function App() {
             <Route
               path="/supervisor"
               element={
-                <ProtectedRoute>
-                  <RequireRole role="supervisor">
-                    <MainLayout appName="OrderDemo">
-                      <SupervisorDashboard />
-                    </MainLayout>
-                  </RequireRole>
-                </ProtectedRoute>
+                <MainLayout appName="OrderDemo">
+                  <SupervisorDashboard />
+                </MainLayout>
               }
             />
 
@@ -209,13 +208,9 @@ function App() {
             <Route
               path="/auditor"
               element={
-                <ProtectedRoute>
-                  <RequireRole role="auditor">
-                    <MainLayout appName="OrderDemo">
-                      <AuditorDashboard />
-                    </MainLayout>
-                  </RequireRole>
-                </ProtectedRoute>
+                <MainLayout appName="OrderDemo">
+                  <AuditorDashboard />
+                </MainLayout>
               }
             />
 
@@ -223,13 +218,9 @@ function App() {
             <Route
               path="/admin"
               element={
-                <ProtectedRoute>
-                  <RequireRole role="admin">
-                    <MainLayout appName="OrderDemo">
-                      <AdminDashboard />
-                    </MainLayout>
-                  </RequireRole>
-                </ProtectedRoute>
+                <MainLayout appName="OrderDemo">
+                  <AdminDashboard />
+                </MainLayout>
               }
             />
 

@@ -542,8 +542,8 @@
     }
   },
   "qa_signoff": null,
-  "status": "human_review",
-  "planStatus": "review",
-  "updated_at": "2026-01-02T15:37:16.834Z",
+  "status": "backlog",
+  "planStatus": "pending",
+  "updated_at": "2026-01-02T15:58:34.492Z",
   "last_updated": "2026-01-02T15:40:38.692974+00:00"
 }

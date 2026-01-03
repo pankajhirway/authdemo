@@ -124,7 +124,7 @@ function SupervisorDashboardContent() {
 export default function SupervisorDashboard() {
   return (
     <ProtectedRoute>
-      <RequireRole allowedRoles={["supervisor"]}>
+      <RequireRole roles={["supervisor"]}>
         <SupervisorDashboardContent />
       </RequireRole>
     </ProtectedRoute>
