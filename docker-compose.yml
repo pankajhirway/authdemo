@@ -14,7 +14,7 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_HEALTH_ENABLED: "true"
       KC_METRICS_ENABLED: "true"
-    command: start-dev
+    command: start-dev --import-realm
     ports:
       - "8080:8080"
     volumes:
